@@ -1,555 +1,408 @@
-import './ui-text.js';
+import "./ui-text.js";
 
 export default {
-  title: 'Primitives/Typography/Text',
-  component: 'ui-text',
+  title: "Primitives/ui-text",
+  component: "ui-text",
+  argTypes: {
+    as: {
+      control: "select",
+      options: ["h1", "h2", "h3", "h4", "h5", "h6", "p", "span", "strong", "em", "small", "code"],
+      description: "The HTML element to render"
+    },
+    level: {
+      control: { type: "number", min: 1, max: 6, step: 1 },
+      description: "Heading level (1-6), automatically sets 'as' to h1-h6"
+    },
+    size: {
+      control: "select",
+      options: ["xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl", "5xl", "6xl"],
+      description: "Text size"
+    },
+    weight: {
+      control: "select",
+      options: ["normal", "medium", "semibold", "bold"],
+      description: "Font weight"
+    },
+    align: {
+      control: "select",
+      options: ["left", "center", "right", "justify"],
+      description: "Text alignment"
+    },
+    color: {
+      control: "color",
+      description: "Text color"
+    },
+    truncate: {
+      control: "boolean",
+      description: "Truncate text with ellipsis"
+    },
+    clickable: {
+      control: "boolean",
+      description: "Make text clickable"
+    }
+  },
   parameters: {
     docs: {
       description: {
-        component: 'A flexible text component supporting multiple variants, sizes, weights, and styling options with comprehensive accessibility features.'
-      }
-    },
-    a11y: {
-      config: {
-        rules: [
-          {
-            id: 'color-contrast',
-            enabled: true
-          },
-          {
-            id: 'focus-order-semantics',
-            enabled: true
-          }
-        ]
-      }
-    }
-  },
-  argTypes: {
-    variant: {
-      control: 'select',
-      options: ['body', 'heading', 'caption', 'label', 'link'],
-      description: 'Text variant affecting default styling',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: 'body' }
-      }
-    },
-    size: {
-      control: 'select',
-      options: ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'],
-      description: 'Text size',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: 'md' }
-      }
-    },
-    weight: {
-      control: 'select',
-      options: ['normal', 'medium', 'semibold', 'bold'],
-      description: 'Font weight',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: 'normal' }
-      }
-    },
-    align: {
-      control: 'select',
-      options: ['left', 'center', 'right', 'justify'],
-      description: 'Text alignment',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: 'left' }
-      }
-    },
-    truncate: {
-      control: 'boolean',
-      description: 'Truncate text with ellipsis',
-      table: {
-        type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' }
-      }
-    },
-    clickable: {
-      control: 'boolean',
-      description: 'Make text clickable with keyboard support',
-      table: {
-        type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' }
-      }
-    },
-    color: {
-      control: 'color',
-      description: 'Custom text color',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: '' }
-      }
-    },
-    'aria-label': {
-      control: 'text',
-      description: 'Accessible label for screen readers',
-      table: {
-        type: { summary: 'string' }
-      }
-    },
-    children: {
-      control: 'text',
-      description: 'Text content',
-      table: {
-        type: { summary: 'string | HTML' }
+        component: "A semantic text component that renders proper HTML elements for accessibility and SEO. Supports headings, paragraphs, and inline text elements."
       }
     }
   }
 };
 
-// Template for creating text instances
-const Template = (args) => {
-  const text = document.createElement('ui-text');
-  
-  Object.keys(args).forEach(key => {
-    if (key === 'children') {
-      text.innerHTML = args[key];
-    } else if (key === 'aria-label') {
-      if (args[key]) text.setAttribute('aria-label', args[key]);
-    } else if (typeof args[key] === 'boolean') {
-      if (args[key]) text.setAttribute(key, '');
-    } else if (args[key]) {
-      text.setAttribute(key, args[key]);
+export const Default = {
+  args: {
+    as: "span"
+  },
+  render: (args) => `<ui-text ${Object.entries(args).map(([key, value]) => value !== undefined && value !== null ? `${key}="${value}"` : '').filter(Boolean).join(' ')}>Default text content</ui-text>`
+};
+
+export const SemanticHeadings = {
+  render: () => `
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <ui-text as="h1">Heading Level 1</ui-text>
+      <ui-text as="h2">Heading Level 2</ui-text>
+      <ui-text as="h3">Heading Level 3</ui-text>
+      <ui-text as="h4">Heading Level 4</ui-text>
+      <ui-text as="h5">Heading Level 5</ui-text>
+      <ui-text as="h6">Heading Level 6</ui-text>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: "Semantic heading elements (h1-h6) with proper hierarchy and default styling."
+      }
     }
-  });
-  
-  return text;
+  }
 };
 
-// Basic variant stories
-export const Body = Template.bind({});
-Body.args = {
-  variant: 'body',
-  children: 'This is body text that can be used for paragraphs and general content.'
+export const HeadingLevels = {
+  render: () => `
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <ui-text level="1">Heading Level 1 (using level prop)</ui-text>
+      <ui-text level="2">Heading Level 2 (using level prop)</ui-text>
+      <ui-text level="3">Heading Level 3 (using level prop)</ui-text>
+      <ui-text level="4">Heading Level 4 (using level prop)</ui-text>
+      <ui-text level="5">Heading Level 5 (using level prop)</ui-text>
+      <ui-text level="6">Heading Level 6 (using level prop)</ui-text>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: "Using the level prop (1-6) to automatically create heading elements. This is a convenient shorthand for setting as='h1' through as='h6'."
+      }
+    }
+  }
 };
 
-export const Heading = Template.bind({});
-Heading.args = {
-  variant: 'heading',
-  size: 'xl',
-  children: 'This is a heading'
+export const TextElements = {
+  render: () => `
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <ui-text as="p">This is a paragraph element with proper block-level display.</ui-text>
+      <ui-text as="span">This is a span element for inline text.</ui-text>
+      <ui-text as="strong">This is strong text (bold).</ui-text>
+      <ui-text as="em">This is emphasized text (italic).</ui-text>
+      <ui-text as="small">This is small text, typically for fine print.</ui-text>
+      <ui-text as="code">This is code text with monospace font.</ui-text>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: "Various text elements including paragraph, span, strong, emphasis, small, and code elements."
+      }
+    }
+  }
 };
 
-export const Caption = Template.bind({});
-Caption.args = {
-  variant: 'caption',
-  size: 'sm',
-  children: 'This is caption text for additional context'
+export const InlineUsage = {
+  render: () => `
+    <div style="line-height: 1.6;">
+      <ui-text as="p">
+        This paragraph contains <ui-text as="strong">bold text</ui-text>, 
+        <ui-text as="em">italic text</ui-text>, and 
+        <ui-text as="code">inline code</ui-text>. 
+        You can also include <ui-text as="small">small text</ui-text> 
+        within the same paragraph.
+      </ui-text>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: "Inline text elements used within paragraphs, showing how they integrate naturally with text flow."
+      }
+    }
+  }
 };
 
-export const Label = Template.bind({});
-Label.args = {
-  variant: 'label',
-  size: 'sm',
-  children: 'Form Label'
+export const Sizes = {
+  render: () => `
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <ui-text as="p" size="xs">Extra small text (xs)</ui-text>
+      <ui-text as="p" size="sm">Small text (sm)</ui-text>
+      <ui-text as="p" size="md">Medium text (md) - default</ui-text>
+      <ui-text as="p" size="lg">Large text (lg)</ui-text>
+      <ui-text as="p" size="xl">Extra large text (xl)</ui-text>
+      <ui-text as="p" size="2xl">2x large text (2xl)</ui-text>
+      <ui-text as="p" size="3xl">3x large text (3xl)</ui-text>
+      <ui-text as="p" size="4xl">4x large text (4xl)</ui-text>
+      <ui-text as="p" size="5xl">5x large text (5xl)</ui-text>
+      <ui-text as="p" size="6xl">6x large text (6xl)</ui-text>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: "All available text sizes from xs to 6xl. Size can be applied to any element type."
+      }
+    }
+  }
 };
 
-export const Link = Template.bind({});
-Link.args = {
-  variant: 'link',
-  clickable: true,
-  children: 'This is a clickable link'
+export const Weights = {
+  render: () => `
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <ui-text as="p" weight="normal">Normal weight text</ui-text>
+      <ui-text as="p" weight="medium">Medium weight text</ui-text>
+      <ui-text as="p" weight="semibold">Semibold weight text</ui-text>
+      <ui-text as="p" weight="bold">Bold weight text</ui-text>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: "Different font weights available for any text element."
+      }
+    }
+  }
 };
 
-// Size variations
-export const ExtraSmall = Template.bind({});
-ExtraSmall.args = {
-  size: 'xs',
-  children: 'Extra small text'
+export const Alignment = {
+  render: () => `
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <ui-text as="p" align="left">Left aligned text (default)</ui-text>
+      <ui-text as="p" align="center">Center aligned text</ui-text>
+      <ui-text as="p" align="right">Right aligned text</ui-text>
+      <ui-text as="p" align="justify">Justified text. This is a longer paragraph that will demonstrate how justified text works with proper spacing between words to create even margins on both sides.</ui-text>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: "Text alignment options: left, center, right, and justify."
+      }
+    }
+  }
 };
 
-export const Small = Template.bind({});
-Small.args = {
-  size: 'sm',
-  children: 'Small text'
+export const Colors = {
+  render: () => `
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <ui-text as="p" color="hsl(0, 0%, 10%)">Default text color</ui-text>
+      <ui-text as="p" color="hsl(220, 85%, 57%)">Primary blue text</ui-text>
+      <ui-text as="p" color="hsl(142, 71%, 45%)">Success green text</ui-text>
+      <ui-text as="p" color="hsl(38, 92%, 50%)">Warning orange text</ui-text>
+      <ui-text as="p" color="hsl(0, 84%, 60%)">Error red text</ui-text>
+      <ui-text as="p" color="hsl(220, 9%, 46%)">Muted gray text</ui-text>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: "Custom colors using HSL values for semantic color meanings."
+      }
+    }
+  }
 };
 
-export const MediumSize = Template.bind({});
-MediumSize.args = {
-  size: 'md',
-  children: 'Medium text (default)'
+export const Truncation = {
+  render: () => `
+    <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 300px;">
+      <ui-text as="p">Normal text that will wrap to multiple lines when it exceeds the container width.</ui-text>
+      <ui-text as="p" truncate>Truncated text that will be cut off with an ellipsis when it exceeds the container width.</ui-text>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: "Text truncation with ellipsis for single-line text overflow."
+      }
+    }
+  }
 };
 
-export const Large = Template.bind({});
-Large.args = {
-  size: 'lg',
-  children: 'Large text'
+export const Clickable = {
+  render: () => `
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <ui-text as="span" clickable>Clickable inline text</ui-text>
+      <ui-text as="p" clickable>Clickable paragraph text</ui-text>
+      <ui-text as="h3" clickable>Clickable heading</ui-text>
+    </div>
+    <script>
+      document.querySelectorAll('ui-text[clickable]').forEach(element => {
+        element.addEventListener('ui-text-click', (e) => {
+          console.log('Text clicked:', e.detail);
+          alert(\`Clicked \${e.detail.as} element\`);
+        });
+      });
+    </script>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: "Clickable text elements with proper accessibility attributes and keyboard navigation."
+      }
+    }
+  }
 };
 
-export const ExtraLarge = Template.bind({});
-ExtraLarge.args = {
-  size: 'xl',
-  children: 'Extra large text'
+export const AccessibilityDemo = {
+  render: () => `
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <ui-text as="h1">Page Title (H1)</ui-text>
+      <ui-text as="h2">Section Title (H2)</ui-text>
+      <ui-text as="p">This is a paragraph with <ui-text as="strong">important text</ui-text> and <ui-text as="em">emphasized text</ui-text>.</ui-text>
+      <ui-text as="p">Code example: <ui-text as="code">const example = "Hello World";</ui-text></ui-text>
+      <ui-text as="small">Fine print or disclaimers should use the small element.</ui-text>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: "Proper semantic HTML structure for accessibility and SEO. Screen readers will correctly interpret the document structure."
+      }
+    }
+  }
 };
 
-// Weight variations
-export const Normal = Template.bind({});
-Normal.args = {
-  weight: 'normal',
-  children: 'Normal weight text'
+export const ResponsiveHeadings = {
+  render: () => `
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <ui-text as="h1" size="6xl">Large Hero Title</ui-text>
+      <ui-text as="h2" size="3xl">Section Title</ui-text>
+      <ui-text as="h3" size="2xl">Subsection Title</ui-text>
+      <ui-text as="p" size="lg">Large paragraph text for better readability.</ui-text>
+      <ui-text as="p" size="md">Regular paragraph text.</ui-text>
+      <ui-text as="small" size="sm">Small text for captions or notes.</ui-text>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: "Combining semantic elements with custom sizes for responsive typography that maintains accessibility."
+      }
+    }
+  }
 };
 
-export const MediumWeight = Template.bind({});
-MediumWeight.args = {
-  weight: 'medium',
-  children: 'Medium weight text'
+export const EventHandling = {
+  render: () => `
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <ui-text as="h3" clickable id="heading-click">Click this heading</ui-text>
+      <ui-text as="p" clickable id="paragraph-click">Click this paragraph</ui-text>
+      <ui-text as="span" clickable id="span-click">Click this span</ui-text>
+      <div id="event-log" style="padding: 1rem; background: hsl(220, 13%, 98%); border-radius: 0.5rem; font-family: monospace; font-size: 0.875rem; max-height: 150px; overflow-y: auto;">
+        Click the elements above to see events...
+      </div>
+    </div>
+    <script>
+      (function() {
+        const log = document.getElementById('event-log');
+        const elements = document.querySelectorAll('#heading-click, #paragraph-click, #span-click');
+        
+        elements.forEach(element => {
+          element.addEventListener('ui-text-click', (e) => {
+            const time = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.textContent = \`[\${time}] \${e.detail.as} element clicked (level: \${e.detail.level || 'N/A'})\`;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+          });
+        });
+      })();
+    </script>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: "Interactive example showing event handling with semantic text elements."
+      }
+    }
+  }
 };
 
-export const Semibold = Template.bind({});
-Semibold.args = {
-  weight: 'semibold',
-  children: 'Semibold weight text'
+export const DocumentStructure = {
+  render: () => `
+    <article style="max-width: 600px; margin: 0 auto; line-height: 1.6;">
+      <ui-text as="h1">Article Title</ui-text>
+      <ui-text as="p" size="lg" color="hsl(220, 9%, 46%)">
+        Article subtitle or lead paragraph with larger text and muted color.
+      </ui-text>
+      
+      <ui-text as="h2">First Section</ui-text>
+      <ui-text as="p">
+        This is the first paragraph of the article. It contains 
+        <ui-text as="strong">important information</ui-text> and 
+        <ui-text as="em">emphasized points</ui-text>.
+      </ui-text>
+      
+      <ui-text as="p">
+        Here's a code example: <ui-text as="code">npm install ui-text</ui-text>
+      </ui-text>
+      
+      <ui-text as="h3">Subsection</ui-text>
+      <ui-text as="p">
+        This subsection provides additional details.
+      </ui-text>
+      
+      <ui-text as="h2">Second Section</ui-text>
+      <ui-text as="p">
+        Another section with regular paragraph text.
+      </ui-text>
+      
+      <ui-text as="small" color="hsl(220, 9%, 64%)">
+        Published on January 1, 2024
+      </ui-text>
+    </article>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: "Complete document structure example showing proper semantic hierarchy for articles and content."
+      }
+    }
+  }
 };
 
-export const Bold = Template.bind({});
-Bold.args = {
-  weight: 'bold',
-  children: 'Bold weight text'
-};
-
-// Alignment variations
-export const LeftAlign = Template.bind({});
-LeftAlign.args = {
-  align: 'left',
-  children: 'Left aligned text'
-};
-
-export const CenterAlign = Template.bind({});
-CenterAlign.args = {
-  align: 'center',
-  children: 'Center aligned text'
-};
-
-export const RightAlign = Template.bind({});
-RightAlign.args = {
-  align: 'right',
-  children: 'Right aligned text'
-};
-
-export const JustifyAlign = Template.bind({});
-JustifyAlign.args = {
-  align: 'justify',
-  children: 'Justified text that will be evenly distributed across the line with spaces adjusted to create clean edges on both sides of the paragraph.'
-};
-
-// Special features
-export const Truncated = Template.bind({});
-Truncated.args = {
-  truncate: true,
-  children: 'This is a very long text that will be truncated with an ellipsis when it exceeds the available width of its container'
-};
-
-export const Clickable = Template.bind({});
-Clickable.args = {
-  clickable: true,
-  children: 'Click me! I am interactive text'
-};
-
-export const CustomColor = Template.bind({});
-CustomColor.args = {
-  color: 'hsl(340, 82%, 52%)',
-  children: 'Text with custom color'
-};
-
-export const WithAriaLabel = Template.bind({});
-WithAriaLabel.args = {
-  'aria-label': 'Close button',
-  clickable: true,
-  children: '×'
-};
-
-// Showcase stories
-export const AllVariants = () => {
-  const container = document.createElement('div');
-  container.style.cssText = 'display: flex; flex-direction: column; gap: 1rem;';
-  
-  const variants = ['body', 'heading', 'caption', 'label', 'link'];
-  
-  variants.forEach(variant => {
-    const text = document.createElement('ui-text');
-    text.setAttribute('variant', variant);
-    if (variant === 'link') text.setAttribute('clickable', '');
-    text.textContent = `${variant.charAt(0).toUpperCase() + variant.slice(1)} variant`;
-    container.appendChild(text);
-  });
-  
-  return container;
-};
-
-export const AllSizes = () => {
-  const container = document.createElement('div');
-  container.style.cssText = 'display: flex; flex-direction: column; gap: 1rem;';
-  
-  const sizes = ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'];
-  
-  sizes.forEach(size => {
-    const text = document.createElement('ui-text');
-    text.setAttribute('size', size);
-    text.textContent = `Size ${size}`;
-    container.appendChild(text);
-  });
-  
-  return container;
-};
-
-export const AllWeights = () => {
-  const container = document.createElement('div');
-  container.style.cssText = 'display: flex; flex-direction: column; gap: 1rem;';
-  
-  const weights = ['normal', 'medium', 'semibold', 'bold'];
-  
-  weights.forEach(weight => {
-    const text = document.createElement('ui-text');
-    text.setAttribute('weight', weight);
-    text.textContent = `${weight.charAt(0).toUpperCase() + weight.slice(1)} weight`;
-    container.appendChild(text);
-  });
-  
-  return container;
-};
-
-export const AllAlignments = () => {
-  const container = document.createElement('div');
-  container.style.cssText = 'display: flex; flex-direction: column; gap: 1rem; width: 300px; border: 1px solid hsl(220, 9%, 86%); padding: 1rem;';
-  
-  const alignments = ['left', 'center', 'right', 'justify'];
-  
-  alignments.forEach(align => {
-    const text = document.createElement('ui-text');
-    text.setAttribute('align', align);
-    text.textContent = `${align.charAt(0).toUpperCase() + align.slice(1)} aligned text that demonstrates the alignment behavior`;
-    container.appendChild(text);
-  });
-  
-  return container;
-};
-
-export const HeadingHierarchy = () => {
-  const container = document.createElement('div');
-  container.style.cssText = 'display: flex; flex-direction: column; gap: 1rem;';
-  
-  const headingSizes = ['6xl', '5xl', '4xl', '3xl', '2xl', 'xl', 'lg'];
-  
-  headingSizes.forEach((size, index) => {
-    const text = document.createElement('ui-text');
-    text.setAttribute('variant', 'heading');
-    text.setAttribute('size', size);
-    text.textContent = `H${index + 1} Heading (${size})`;
-    container.appendChild(text);
-  });
-  
-  return container;
-};
-
-export const TypographyScale = () => {
-  const container = document.createElement('div');
-  container.style.cssText = 'display: flex; flex-direction: column; gap: 0.5rem;';
-  
-  const scales = [
-    { size: '6xl', label: 'Display 1' },
-    { size: '5xl', label: 'Display 2' },
-    { size: '4xl', label: 'Display 3' },
-    { size: '3xl', label: 'Heading 1' },
-    { size: '2xl', label: 'Heading 2' },
-    { size: 'xl', label: 'Heading 3' },
-    { size: 'lg', label: 'Heading 4' },
-    { size: 'md', label: 'Body Large' },
-    { size: 'sm', label: 'Body Small' },
-    { size: 'xs', label: 'Caption' }
-  ];
-  
-  scales.forEach(({ size, label }) => {
-    const text = document.createElement('ui-text');
-    text.setAttribute('size', size);
-    text.setAttribute('variant', size.includes('xl') || size === 'lg' ? 'heading' : 'body');
-    text.textContent = `${label} (${size})`;
-    container.appendChild(text);
-  });
-  
-  return container;
-};
-
-// Interactive story
-export const Interactive = Template.bind({});
-Interactive.args = {
-  clickable: true,
-  children: 'Click me to see interaction!'
-};
-
-Interactive.play = async ({ canvasElement }) => {
-  const text = canvasElement.querySelector('ui-text');
-  
-  // Add event listener for demonstration
-  text.addEventListener('ui-text-click', (event) => {
-    console.log('Text clicked:', event.detail);
-    
-    // Change color briefly
-    const originalColor = text.color;
-    text.color = 'hsl(340, 82%, 52%)';
-    
-    setTimeout(() => {
-      text.color = originalColor;
-    }, 500);
-  });
-};
-
-// Accessibility testing story
-export const AccessibilityTest = () => {
-  const container = document.createElement('div');
-  container.style.cssText = 'display: flex; flex-direction: column; gap: 1rem; max-width: 600px;';
-  
-  const title = document.createElement('h3');
-  title.textContent = 'Accessibility Features';
-  container.appendChild(title);
-  
-  // Clickable text with aria-label
-  const labeledText = document.createElement('ui-text');
-  labeledText.setAttribute('clickable', '');
-  labeledText.setAttribute('aria-label', 'Close dialog');
-  labeledText.textContent = '×';
-  labeledText.style.cssText = 'font-size: 1.5rem; cursor: pointer;';
-  
-  const labelDescription = document.createElement('p');
-  labelDescription.textContent = 'Icon text with aria-label for screen readers';
-  labelDescription.style.cssText = 'margin: 0.5rem 0; font-size: 0.875rem; color: hsl(220, 9%, 40%);';
-  
-  container.appendChild(labeledText);
-  container.appendChild(labelDescription);
-  
-  // Keyboard navigation demo
-  const keyboardSection = document.createElement('div');
-  keyboardSection.style.cssText = 'margin-top: 1rem; padding: 1rem; border: 1px solid hsl(220, 9%, 86%); border-radius: 0.375rem;';
-  
-  const keyboardTitle = document.createElement('h4');
-  keyboardTitle.textContent = 'Keyboard Navigation';
-  keyboardTitle.style.cssText = 'margin: 0 0 0.5rem 0;';
-  
-  const clickableText1 = document.createElement('ui-text');
-  clickableText1.setAttribute('clickable', '');
-  clickableText1.textContent = 'First clickable text';
-  clickableText1.style.cssText = 'display: block; margin: 0.5rem 0;';
-  
-  const clickableText2 = document.createElement('ui-text');
-  clickableText2.setAttribute('clickable', '');
-  clickableText2.textContent = 'Second clickable text';
-  clickableText2.style.cssText = 'display: block; margin: 0.5rem 0;';
-  
-  const clickableText3 = document.createElement('ui-text');
-  clickableText3.setAttribute('clickable', '');
-  clickableText3.textContent = 'Third clickable text';
-  clickableText3.style.cssText = 'display: block; margin: 0.5rem 0;';
-  
-  keyboardSection.appendChild(keyboardTitle);
-  keyboardSection.appendChild(clickableText1);
-  keyboardSection.appendChild(clickableText2);
-  keyboardSection.appendChild(clickableText3);
-  
-  container.appendChild(keyboardSection);
-  
-  return container;
-};
-
-// Theming story
-export const Theming = () => {
-  const container = document.createElement('div');
-  container.style.cssText = 'display: flex; flex-direction: column; gap: 2rem;';
-  
-  const title = document.createElement('h3');
-  title.textContent = 'Theme Customization';
-  container.appendChild(title);
-  
-  // Default theme
-  const defaultSection = document.createElement('div');
-  const defaultTitle = document.createElement('h4');
-  defaultTitle.textContent = 'Default Theme';
-  defaultTitle.style.cssText = 'margin: 0 0 1rem 0;';
-  
-  const defaultTexts = document.createElement('div');
-  defaultTexts.style.cssText = 'display: flex; flex-direction: column; gap: 0.5rem;';
-  
-  ['body', 'heading', 'caption', 'label', 'link'].forEach(variant => {
-    const text = document.createElement('ui-text');
-    text.setAttribute('variant', variant);
-    if (variant === 'link') text.setAttribute('clickable', '');
-    text.textContent = `${variant.charAt(0).toUpperCase() + variant.slice(1)} variant`;
-    defaultTexts.appendChild(text);
-  });
-  
-  defaultSection.appendChild(defaultTitle);
-  defaultSection.appendChild(defaultTexts);
-  container.appendChild(defaultSection);
-  
-  // Custom theme
-  const customSection = document.createElement('div');
-  const customTitle = document.createElement('h4');
-  customTitle.textContent = 'Custom Theme';
-  customTitle.style.cssText = 'margin: 0 0 1rem 0;';
-  
-  const customTexts = document.createElement('div');
-  customTexts.style.cssText = 'display: flex; flex-direction: column; gap: 0.5rem;';
-  
-  const customText1 = document.createElement('ui-text');
-  customText1.setAttribute('variant', 'heading');
-  customText1.setAttribute('size', 'xl');
-  customText1.textContent = 'Custom Heading';
-  customText1.style.cssText = `
-    --ui-text-color-default: hsl(340, 82%, 52%);
-    --ui-text-font-weight-semibold: 800;
-  `;
-  
-  const customText2 = document.createElement('ui-text');
-  customText2.setAttribute('variant', 'body');
-  customText2.textContent = 'Custom Body Text';
-  customText2.style.cssText = `
-    --ui-text-color-default: hsl(36, 100%, 50%);
-    --ui-text-font-size-md: 1.1rem;
-  `;
-  
-  const customText3 = document.createElement('ui-text');
-  customText3.setAttribute('variant', 'link');
-  customText3.setAttribute('clickable', '');
-  customText3.textContent = 'Custom Link';
-  customText3.style.cssText = `
-    --ui-text-color-link: hsl(292, 74%, 42%);
-    --ui-text-color-link-hover: hsl(292, 74%, 32%);
-  `;
-  
-  customTexts.appendChild(customText1);
-  customTexts.appendChild(customText2);
-  customTexts.appendChild(customText3);
-  
-  customSection.appendChild(customTitle);
-  customSection.appendChild(customTexts);
-  container.appendChild(customSection);
-  
-  return container;
-};
-
-// Truncation demo
-export const TruncationDemo = () => {
-  const container = document.createElement('div');
-  container.style.cssText = 'display: flex; flex-direction: column; gap: 1rem; width: 300px; border: 1px solid hsl(220, 9%, 86%); padding: 1rem;';
-  
-  const title = document.createElement('h3');
-  title.textContent = 'Truncation Examples';
-  title.style.cssText = 'margin: 0 0 1rem 0;';
-  container.appendChild(title);
-  
-  const normalText = document.createElement('ui-text');
-  normalText.textContent = 'This is normal text that will wrap naturally to multiple lines when it exceeds the container width.';
-  normalText.style.cssText = 'margin-bottom: 1rem;';
-  
-  const truncatedText = document.createElement('ui-text');
-  truncatedText.setAttribute('truncate', '');
-  truncatedText.textContent = 'This is truncated text that will be cut off with an ellipsis when it exceeds the container width.';
-  
-  container.appendChild(normalText);
-  container.appendChild(truncatedText);
-  
-  return container;
+export const Theming = {
+  render: () => `
+    <div style="display: flex; flex-direction: column; gap: 2rem;">
+      <div>
+        <ui-text as="h3">Default Theme</ui-text>
+        <ui-text as="p">Regular paragraph text</ui-text>
+        <ui-text as="code">Code element</ui-text>
+      </div>
+      
+      <div style="--ui-text-color-default: hsl(280, 100%, 50%); --ui-text-font-family-heading: 'Georgia, serif'; --ui-text-font-family-mono: 'Courier New, monospace';">
+        <ui-text as="h3">Custom Theme</ui-text>
+        <ui-text as="p">Paragraph with custom color</ui-text>
+        <ui-text as="code">Code with custom font</ui-text>
+      </div>
+      
+      <div style="--ui-text-color-default: hsl(142, 71%, 45%); --ui-text-font-size-md: 1.125rem; --ui-text-line-height-md: 1.75rem;">
+        <ui-text as="h3">Green Theme with Larger Text</ui-text>
+        <ui-text as="p">Paragraph with green color and larger size</ui-text>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: "Theming capabilities using CSS custom properties for colors, fonts, and sizes."
+      }
+    }
+  }
 };

@@ -3,8 +3,8 @@ import templateHtml from "./ui-text.html?raw";
 import textCss from "./ui-text.css?inline";
 
 export interface UiTextEventDetail {
-  variant: string;
-  size: string;
+  as: string;
+  level: number | null;
   originalEvent: Event;
 }
 
@@ -14,16 +14,17 @@ declare global {
   }
 }
 
-type TextVariant = "body" | "heading" | "caption" | "label" | "link";
+type TextAs = "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span" | "strong" | "em" | "small" | "code";
 type TextSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl";
 type TextWeight = "normal" | "medium" | "semibold" | "bold";
 
 export class UiText extends ShadowComponent {
   static get observedAttributes(): string[] {
-    return ["variant", "size", "weight", "truncate", "color", "align", "clickable"];
+    return ["as", "level", "size", "weight", "truncate", "color", "align", "clickable"];
   }
 
-  private _variant: TextVariant = "body";
+  private _as: TextAs = "span";
+  private _level: number | null = null;
   private _size: TextSize = "md";
   private _weight: TextWeight = "normal";
   private _truncate = false;
@@ -37,13 +38,30 @@ export class UiText extends ShadowComponent {
     this._handleKeydown = this._handleKeydown.bind(this);
   }
 
-  get variant(): TextVariant {
-    return this._variant;
+  get as(): TextAs {
+    return this._as;
   }
-  set variant(value: TextVariant) {
-    if (["body", "heading", "caption", "label", "link"].includes(value)) {
-      this._variant = value;
-      this.setAttributeSafe("variant", value);
+  set as(value: TextAs) {
+    if (["h1", "h2", "h3", "h4", "h5", "h6", "p", "span", "strong", "em", "small", "code"].includes(value)) {
+      this._as = value;
+      this.setAttributeSafe("as", value);
+      this.render();
+    }
+  }
+
+  get level(): number | null {
+    return this._level;
+  }
+  set level(value: number | null) {
+    if (value === null || (typeof value === "number" && value >= 1 && value <= 6)) {
+      this._level = value;
+      if (value !== null) {
+        this._as = `h${value}` as TextAs;
+        this.setAttributeSafe("level", value);
+        this.setAttributeSafe("as", this._as);
+      } else {
+        this.removeAttribute("level");
+      }
       this.render();
     }
   }
@@ -114,8 +132,14 @@ export class UiText extends ShadowComponent {
     newValue: string | null
   ): void {
     switch (name) {
-      case "variant":
-        this._variant = (newValue as TextVariant) || "body";
+      case "as":
+        this._as = (newValue as TextAs) || "span";
+        break;
+      case "level":
+        this._level = newValue ? parseInt(newValue) : null;
+        if (this._level !== null && this._level >= 1 && this._level <= 6) {
+          this._as = `h${this._level}` as TextAs;
+        }
         break;
       case "size":
         this._size = (newValue as TextSize) || "md";
@@ -136,19 +160,23 @@ export class UiText extends ShadowComponent {
         this._clickable = newValue !== null;
         break;
     }
+    
+    if (this.isConnected) {
+      this.render();
+    }
   }
 
   protected renderShadowContent(): void {
     const html = templateHtml
-      .replace("{variant}", this.variant)
-      .replace("{size}", this.size)
-      .replace("{weight}", this.weight)
-      .replace("{truncate}", this.truncate ? "ui-text--truncate" : "")
-      .replace("{align}", this.align)
-      .replace("{clickable}", this.clickable ? "ui-text--clickable" : "")
-      .replace("{color}", this.color ? `style="color: ${this.color}"` : "")
-      .replace("{tabindex}", this.clickable ? 'tabindex="0"' : "")
-      .replace("{role}", this.clickable ? 'role="button"' : "");
+      .replace(/{element}/g, this.as)
+      .replace(/{size}/g, this.size)
+      .replace(/{weight}/g, this.weight)
+      .replace(/{truncate}/g, this.truncate ? "ui-text--truncate" : "")
+      .replace(/{align}/g, this.align)
+      .replace(/{clickable}/g, this.clickable ? "ui-text--clickable" : "")
+      .replace(/{color}/g, this.color ? `style="color: ${this.color}"` : "")
+      .replace(/{tabindex}/g, this.clickable ? 'tabindex="0"' : "")
+      .replace(/{role}/g, this.clickable ? 'role="button"' : "");
 
     this.setContent(html);
     this._setupEventListeners();
@@ -178,8 +206,8 @@ export class UiText extends ShadowComponent {
     this.dispatchEvent(
       new CustomEvent("ui-text-click", {
         detail: {
-          variant: this.variant,
-          size: this.size,
+          as: this.as,
+          level: this.level,
           originalEvent: event,
         },
         bubbles: true,
@@ -212,7 +240,8 @@ export class UiText extends ShadowComponent {
 customElements.define("ui-text", UiText);
 
 export function renderUiTextSSR({
-  variant = "body",
+  as = "span",
+  level = null,
   size = "md",
   weight = "normal",
   truncate = false,
@@ -220,7 +249,8 @@ export function renderUiTextSSR({
   align = "left",
   clickable = false,
 }: {
-  variant?: TextVariant;
+  as?: TextAs;
+  level?: number | null;
   size?: TextSize;
   weight?: TextWeight;
   truncate?: boolean;
@@ -228,17 +258,20 @@ export function renderUiTextSSR({
   align?: "left" | "center" | "right" | "justify";
   clickable?: boolean;
 } = {}): string {
+  // If level is provided, use it to determine the element
+  const element = level !== null ? `h${level}` : as;
+  
   return `
     <style>${textCss}</style>
     ${templateHtml
-      .replace("{variant}", variant)
-      .replace("{size}", size)
-      .replace("{weight}", weight)
-      .replace("{truncate}", truncate ? "ui-text--truncate" : "")
-      .replace("{align}", align)
-      .replace("{clickable}", clickable ? "ui-text--clickable" : "")
-      .replace("{color}", color ? `style="color: ${color}"` : "")
-      .replace("{tabindex}", clickable ? 'tabindex="0"' : "")
-      .replace("{role}", clickable ? 'role="button"' : "")}
+      .replace(/{element}/g, element)
+      .replace(/{size}/g, size)
+      .replace(/{weight}/g, weight)
+      .replace(/{truncate}/g, truncate ? "ui-text--truncate" : "")
+      .replace(/{align}/g, align)
+      .replace(/{clickable}/g, clickable ? "ui-text--clickable" : "")
+      .replace(/{color}/g, color ? `style="color: ${color}"` : "")
+      .replace(/{tabindex}/g, clickable ? 'tabindex="0"' : "")
+      .replace(/{role}/g, clickable ? 'role="button"' : "")}
   `;
 }

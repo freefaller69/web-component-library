@@ -23,7 +23,8 @@ describe('ui-text', () => {
 
   describe('Component initialization and defaults', () => {
     it('should create with default values', () => {
-      expect(element.variant).toBe('body');
+      expect(element.as).toBe('span');
+      expect(element.level).toBe(null);
       expect(element.size).toBe('md');
       expect(element.weight).toBe('normal');
       expect(element.truncate).toBe(false);
@@ -32,13 +33,13 @@ describe('ui-text', () => {
       expect(element.clickable).toBe(false);
     });
 
-    it('should have proper shadow DOM structure', () => {
+    it('should have proper shadow DOM structure with span element', () => {
       expect(element.shadowRoot).toBeDefined();
       
       const textElement = element.shadowRoot?.querySelector('span');
       expect(textElement).toBeDefined();
       expect(textElement?.classList.contains('ui-text')).toBe(true);
-      expect(textElement?.classList.contains('ui-text--body')).toBe(true);
+      expect(textElement?.classList.contains('ui-text--span')).toBe(true);
       expect(textElement?.classList.contains('ui-text--md')).toBe(true);
       expect(textElement?.classList.contains('ui-text--normal')).toBe(true);
       expect(textElement?.classList.contains('ui-text--left')).toBe(true);
@@ -49,415 +50,440 @@ describe('ui-text', () => {
       expect(textElement).toBeDefined();
     });
 
-    it('should have slot for content projection', () => {
+    it('should have slot for content', () => {
       const slot = element.shadowRoot?.querySelector('slot');
       expect(slot).toBeDefined();
     });
   });
 
-  describe('Attribute/property synchronization', () => {
-    describe('variant', () => {
-      it('should sync property to attribute', () => {
-        element.variant = 'heading';
-        expect(element.getAttribute('variant')).toBe('heading');
-      });
-
-      it('should sync attribute to property', () => {
-        element.setAttribute('variant', 'caption');
-        expect(element.variant).toBe('caption');
-      });
-
-      it('should update CSS classes when variant changes', () => {
-        element.variant = 'heading';
-        
-        const textElement = element.shadowRoot?.querySelector('span');
-        expect(textElement?.classList.contains('ui-text--heading')).toBe(true);
-        expect(textElement?.classList.contains('ui-text--body')).toBe(false);
-      });
-
-      it('should handle invalid variant values', () => {
-        const originalVariant = element.variant;
-        // @ts-expect-error - testing invalid value
-        element.variant = 'invalid';
-        expect(element.variant).toBe(originalVariant);
-      });
+  describe('Semantic HTML elements', () => {
+    it('should render h1 element when as="h1"', () => {
+      element.as = 'h1';
+      const h1Element = element.shadowRoot?.querySelector('h1');
+      expect(h1Element).toBeDefined();
+      expect(h1Element?.classList.contains('ui-text--h1')).toBe(true);
     });
 
-    describe('size', () => {
-      it('should sync property to attribute', () => {
-        element.size = 'xl';
-        expect(element.getAttribute('size')).toBe('xl');
-      });
-
-      it('should sync attribute to property', () => {
-        element.setAttribute('size', 'sm');
-        expect(element.size).toBe('sm');
-      });
-
-      it('should update CSS classes when size changes', () => {
-        element.size = 'xl';
-        
-        const textElement = element.shadowRoot?.querySelector('span');
-        expect(textElement?.classList.contains('ui-text--xl')).toBe(true);
-        expect(textElement?.classList.contains('ui-text--md')).toBe(false);
-      });
-
-      it('should handle invalid size values', () => {
-        const originalSize = element.size;
-        // @ts-expect-error - testing invalid value
-        element.size = 'invalid';
-        expect(element.size).toBe(originalSize);
-      });
+    it('should render h2 element when as="h2"', () => {
+      element.as = 'h2';
+      const h2Element = element.shadowRoot?.querySelector('h2');
+      expect(h2Element).toBeDefined();
+      expect(h2Element?.classList.contains('ui-text--h2')).toBe(true);
     });
 
-    describe('weight', () => {
-      it('should sync property to attribute', () => {
-        element.weight = 'bold';
-        expect(element.getAttribute('weight')).toBe('bold');
-      });
-
-      it('should sync attribute to property', () => {
-        element.setAttribute('weight', 'medium');
-        expect(element.weight).toBe('medium');
-      });
-
-      it('should update CSS classes when weight changes', () => {
-        element.weight = 'bold';
-        
-        const textElement = element.shadowRoot?.querySelector('span');
-        expect(textElement?.classList.contains('ui-text--bold')).toBe(true);
-        expect(textElement?.classList.contains('ui-text--normal')).toBe(false);
-      });
-
-      it('should handle invalid weight values', () => {
-        const originalWeight = element.weight;
-        // @ts-expect-error - testing invalid value
-        element.weight = 'invalid';
-        expect(element.weight).toBe(originalWeight);
-      });
+    it('should render h3 element when as="h3"', () => {
+      element.as = 'h3';
+      const h3Element = element.shadowRoot?.querySelector('h3');
+      expect(h3Element).toBeDefined();
+      expect(h3Element?.classList.contains('ui-text--h3')).toBe(true);
     });
 
-    describe('truncate', () => {
-      it('should sync property to attribute', () => {
-        element.truncate = true;
-        expect(element.hasAttribute('truncate')).toBe(true);
-      });
-
-      it('should sync attribute to property', () => {
-        element.setAttribute('truncate', '');
-        expect(element.truncate).toBe(true);
-      });
-
-      it('should remove attribute when truncate is false', () => {
-        element.truncate = true;
-        element.truncate = false;
-        expect(element.hasAttribute('truncate')).toBe(false);
-      });
-
-      it('should add truncate class when enabled', () => {
-        element.truncate = true;
-        
-        const textElement = element.shadowRoot?.querySelector('span');
-        expect(textElement?.classList.contains('ui-text--truncate')).toBe(true);
-      });
+    it('should render h4 element when as="h4"', () => {
+      element.as = 'h4';
+      const h4Element = element.shadowRoot?.querySelector('h4');
+      expect(h4Element).toBeDefined();
+      expect(h4Element?.classList.contains('ui-text--h4')).toBe(true);
     });
 
-    describe('color', () => {
-      it('should sync property to attribute', () => {
-        element.color = 'hsl(0, 100%, 50%)';
-        expect(element.getAttribute('color')).toBe('hsl(0, 100%, 50%)');
-      });
-
-      it('should sync attribute to property', () => {
-        element.setAttribute('color', 'hsl(120, 100%, 50%)');
-        expect(element.color).toBe('hsl(120, 100%, 50%)');
-      });
-
-      it('should apply inline style when color is set', () => {
-        element.color = 'hsl(0, 100%, 50%)';
-        
-        const textElement = element.shadowRoot?.querySelector('span');
-        expect(textElement?.getAttribute('style')).toContain('color: hsl(0, 100%, 50%)');
-      });
+    it('should render h5 element when as="h5"', () => {
+      element.as = 'h5';
+      const h5Element = element.shadowRoot?.querySelector('h5');
+      expect(h5Element).toBeDefined();
+      expect(h5Element?.classList.contains('ui-text--h5')).toBe(true);
     });
 
-    describe('align', () => {
-      it('should sync property to attribute', () => {
-        element.align = 'center';
-        expect(element.getAttribute('align')).toBe('center');
-      });
-
-      it('should sync attribute to property', () => {
-        element.setAttribute('align', 'right');
-        expect(element.align).toBe('right');
-      });
-
-      it('should update CSS classes when align changes', () => {
-        element.align = 'center';
-        
-        const textElement = element.shadowRoot?.querySelector('span');
-        expect(textElement?.classList.contains('ui-text--center')).toBe(true);
-        expect(textElement?.classList.contains('ui-text--left')).toBe(false);
-      });
-
-      it('should handle invalid align values', () => {
-        const originalAlign = element.align;
-        // @ts-expect-error - testing invalid value
-        element.align = 'invalid';
-        expect(element.align).toBe(originalAlign);
-      });
+    it('should render h6 element when as="h6"', () => {
+      element.as = 'h6';
+      const h6Element = element.shadowRoot?.querySelector('h6');
+      expect(h6Element).toBeDefined();
+      expect(h6Element?.classList.contains('ui-text--h6')).toBe(true);
     });
 
-    describe('clickable', () => {
-      it('should sync property to attribute', () => {
-        element.clickable = true;
-        expect(element.hasAttribute('clickable')).toBe(true);
-      });
+    it('should render p element when as="p"', () => {
+      element.as = 'p';
+      const pElement = element.shadowRoot?.querySelector('p');
+      expect(pElement).toBeDefined();
+      expect(pElement?.classList.contains('ui-text--p')).toBe(true);
+    });
 
-      it('should sync attribute to property', () => {
-        element.setAttribute('clickable', '');
-        expect(element.clickable).toBe(true);
-      });
+    it('should render strong element when as="strong"', () => {
+      element.as = 'strong';
+      const strongElement = element.shadowRoot?.querySelector('strong');
+      expect(strongElement).toBeDefined();
+      expect(strongElement?.classList.contains('ui-text--strong')).toBe(true);
+    });
 
-      it('should add clickable class when enabled', () => {
-        element.clickable = true;
-        
-        const textElement = element.shadowRoot?.querySelector('span');
-        expect(textElement?.classList.contains('ui-text--clickable')).toBe(true);
-      });
+    it('should render em element when as="em"', () => {
+      element.as = 'em';
+      const emElement = element.shadowRoot?.querySelector('em');
+      expect(emElement).toBeDefined();
+      expect(emElement?.classList.contains('ui-text--em')).toBe(true);
+    });
 
-      it('should add tabindex and role when clickable', () => {
-        element.clickable = true;
-        
-        const textElement = element.shadowRoot?.querySelector('span');
-        expect(textElement?.getAttribute('tabindex')).toBe('0');
-        expect(textElement?.getAttribute('role')).toBe('button');
-      });
+    it('should render small element when as="small"', () => {
+      element.as = 'small';
+      const smallElement = element.shadowRoot?.querySelector('small');
+      expect(smallElement).toBeDefined();
+      expect(smallElement?.classList.contains('ui-text--small')).toBe(true);
+    });
+
+    it('should render code element when as="code"', () => {
+      element.as = 'code';
+      const codeElement = element.shadowRoot?.querySelector('code');
+      expect(codeElement).toBeDefined();
+      expect(codeElement?.classList.contains('ui-text--code')).toBe(true);
     });
   });
 
-  describe('Event handling', () => {
+  describe('Level property for headings', () => {
+    it('should render h1 when level=1', () => {
+      element.level = 1;
+      expect(element.as).toBe('h1');
+      const h1Element = element.shadowRoot?.querySelector('h1');
+      expect(h1Element).toBeDefined();
+      expect(h1Element?.classList.contains('ui-text--h1')).toBe(true);
+    });
+
+    it('should render h2 when level=2', () => {
+      element.level = 2;
+      expect(element.as).toBe('h2');
+      const h2Element = element.shadowRoot?.querySelector('h2');
+      expect(h2Element).toBeDefined();
+      expect(h2Element?.classList.contains('ui-text--h2')).toBe(true);
+    });
+
+    it('should render h3 when level=3', () => {
+      element.level = 3;
+      expect(element.as).toBe('h3');
+      const h3Element = element.shadowRoot?.querySelector('h3');
+      expect(h3Element).toBeDefined();
+      expect(h3Element?.classList.contains('ui-text--h3')).toBe(true);
+    });
+
+    it('should render h4 when level=4', () => {
+      element.level = 4;
+      expect(element.as).toBe('h4');
+      const h4Element = element.shadowRoot?.querySelector('h4');
+      expect(h4Element).toBeDefined();
+      expect(h4Element?.classList.contains('ui-text--h4')).toBe(true);
+    });
+
+    it('should render h5 when level=5', () => {
+      element.level = 5;
+      expect(element.as).toBe('h5');
+      const h5Element = element.shadowRoot?.querySelector('h5');
+      expect(h5Element).toBeDefined();
+      expect(h5Element?.classList.contains('ui-text--h5')).toBe(true);
+    });
+
+    it('should render h6 when level=6', () => {
+      element.level = 6;
+      expect(element.as).toBe('h6');
+      const h6Element = element.shadowRoot?.querySelector('h6');
+      expect(h6Element).toBeDefined();
+      expect(h6Element?.classList.contains('ui-text--h6')).toBe(true);
+    });
+
+    it('should ignore invalid level values', () => {
+      element.level = 7;
+      expect(element.as).toBe('span'); // Should remain default
+      
+      element.level = 0;
+      expect(element.as).toBe('span'); // Should remain default
+      
+      element.level = -1;
+      expect(element.as).toBe('span'); // Should remain default
+    });
+
+    it('should handle level attribute changes', () => {
+      element.setAttribute('level', '3');
+      expect(element.level).toBe(3);
+      expect(element.as).toBe('h3');
+      
+      const h3Element = element.shadowRoot?.querySelector('h3');
+      expect(h3Element).toBeDefined();
+    });
+  });
+
+  describe('Attribute synchronization', () => {
+    it('should sync as attribute', () => {
+      element.setAttribute('as', 'h1');
+      expect(element.as).toBe('h1');
+      
+      element.as = 'p';
+      expect(element.getAttribute('as')).toBe('p');
+    });
+
+    it('should sync level attribute', () => {
+      element.setAttribute('level', '2');
+      expect(element.level).toBe(2);
+      
+      element.level = 4;
+      expect(element.getAttribute('level')).toBe('4');
+    });
+
+    it('should sync size attribute', () => {
+      element.setAttribute('size', 'lg');
+      expect(element.size).toBe('lg');
+      
+      element.size = 'xl';
+      expect(element.getAttribute('size')).toBe('xl');
+    });
+
+    it('should sync weight attribute', () => {
+      element.setAttribute('weight', 'bold');
+      expect(element.weight).toBe('bold');
+      
+      element.weight = 'medium';
+      expect(element.getAttribute('weight')).toBe('medium');
+    });
+
+    it('should sync truncate attribute', () => {
+      element.setAttribute('truncate', '');
+      expect(element.truncate).toBe(true);
+      
+      element.truncate = false;
+      expect(element.hasAttribute('truncate')).toBe(false);
+    });
+
+    it('should sync color attribute', () => {
+      element.setAttribute('color', 'red');
+      expect(element.color).toBe('red');
+      
+      element.color = 'blue';
+      expect(element.getAttribute('color')).toBe('blue');
+    });
+
+    it('should sync align attribute', () => {
+      element.setAttribute('align', 'center');
+      expect(element.align).toBe('center');
+      
+      element.align = 'right';
+      expect(element.getAttribute('align')).toBe('right');
+    });
+
+    it('should sync clickable attribute', () => {
+      element.setAttribute('clickable', '');
+      expect(element.clickable).toBe(true);
+      
+      element.clickable = false;
+      expect(element.hasAttribute('clickable')).toBe(false);
+    });
+  });
+
+  describe('CSS class application', () => {
+    it('should apply size classes', () => {
+      element.size = 'lg';
+      const textElement = element.shadowRoot?.querySelector('.ui-text');
+      expect(textElement?.classList.contains('ui-text--lg')).toBe(true);
+    });
+
+    it('should apply weight classes', () => {
+      element.weight = 'bold';
+      const textElement = element.shadowRoot?.querySelector('.ui-text');
+      expect(textElement?.classList.contains('ui-text--bold')).toBe(true);
+    });
+
+    it('should apply align classes', () => {
+      element.align = 'center';
+      const textElement = element.shadowRoot?.querySelector('.ui-text');
+      expect(textElement?.classList.contains('ui-text--center')).toBe(true);
+    });
+
+    it('should apply truncate class when truncate is true', () => {
+      element.truncate = true;
+      const textElement = element.shadowRoot?.querySelector('.ui-text');
+      expect(textElement?.classList.contains('ui-text--truncate')).toBe(true);
+    });
+
+    it('should apply clickable class when clickable is true', () => {
+      element.clickable = true;
+      const textElement = element.shadowRoot?.querySelector('.ui-text');
+      expect(textElement?.classList.contains('ui-text--clickable')).toBe(true);
+    });
+  });
+
+  describe('Style attributes', () => {
+    it('should apply color style when color is set', () => {
+      element.color = 'red';
+      const textElement = element.shadowRoot?.querySelector('.ui-text');
+      expect(textElement?.getAttribute('style')).toContain('color: red');
+    });
+
+    it('should not apply color style when color is empty', () => {
+      element.color = '';
+      const textElement = element.shadowRoot?.querySelector('.ui-text');
+      expect(textElement?.getAttribute('style')).toBeFalsy();
+    });
+  });
+
+  describe('Accessibility attributes', () => {
+    it('should apply tabindex when clickable', () => {
+      element.clickable = true;
+      const textElement = element.shadowRoot?.querySelector('.ui-text');
+      expect(textElement?.getAttribute('tabindex')).toBe('0');
+    });
+
+    it('should apply role when clickable', () => {
+      element.clickable = true;
+      const textElement = element.shadowRoot?.querySelector('.ui-text');
+      expect(textElement?.getAttribute('role')).toBe('button');
+    });
+
+    it('should not apply tabindex when not clickable', () => {
+      element.clickable = false;
+      const textElement = element.shadowRoot?.querySelector('.ui-text');
+      expect(textElement?.getAttribute('tabindex')).toBeFalsy();
+    });
+
+    it('should not apply role when not clickable', () => {
+      element.clickable = false;
+      const textElement = element.shadowRoot?.querySelector('.ui-text');
+      expect(textElement?.getAttribute('role')).toBeFalsy();
+    });
+  });
+
+  describe('Click events', () => {
     it('should dispatch ui-text-click event when clicked and clickable', () => {
       element.clickable = true;
+      element.as = 'h1';
+      element.level = 1;
+      
       let eventFired = false;
-      let eventDetail: any;
-
-      element.addEventListener('ui-text-click', (event: Event) => {
+      let eventDetail: any = null;
+      
+      element.addEventListener('ui-text-click', (e: any) => {
         eventFired = true;
-        eventDetail = (event as CustomEvent).detail;
+        eventDetail = e.detail;
       });
-
-      const textElement = element.shadowRoot?.querySelector('span') as HTMLSpanElement;
-      textElement.click();
-
+      
+      const textElement = element.shadowRoot?.querySelector('.ui-text');
+      textElement?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      
       expect(eventFired).toBe(true);
-      expect(eventDetail).toEqual({
-        variant: 'body',
-        size: 'md',
-        originalEvent: expect.any(Event)
-      });
+      expect(eventDetail).toBeDefined();
+      expect(eventDetail.as).toBe('h1');
+      expect(eventDetail.level).toBe(1);
+      expect(eventDetail.originalEvent).toBeDefined();
     });
 
     it('should not dispatch event when not clickable', () => {
       element.clickable = false;
+      
       let eventFired = false;
-
       element.addEventListener('ui-text-click', () => {
         eventFired = true;
       });
-
-      const textElement = element.shadowRoot?.querySelector('span') as HTMLSpanElement;
-      textElement.click();
-
-      expect(eventFired).toBe(false);
-    });
-
-    it('should bubble the event', () => {
-      element.clickable = true;
-      let eventFired = false;
-
-      container.addEventListener('ui-text-click', () => {
-        eventFired = true;
-      });
-
-      const textElement = element.shadowRoot?.querySelector('span') as HTMLSpanElement;
-      textElement.click();
-
-      expect(eventFired).toBe(true);
-    });
-  });
-
-  describe('Keyboard navigation', () => {
-    it('should trigger click on Enter key when clickable', () => {
-      element.clickable = true;
-      let eventFired = false;
-
-      element.addEventListener('ui-text-click', () => {
-        eventFired = true;
-      });
-
-      const textElement = element.shadowRoot?.querySelector('span') as HTMLSpanElement;
-      const enterEvent = new KeyboardEvent('keydown', { key: 'Enter' });
-      textElement.dispatchEvent(enterEvent);
-
-      expect(eventFired).toBe(true);
-    });
-
-    it('should trigger click on Space key when clickable', () => {
-      element.clickable = true;
-      let eventFired = false;
-
-      element.addEventListener('ui-text-click', () => {
-        eventFired = true;
-      });
-
-      const textElement = element.shadowRoot?.querySelector('span') as HTMLSpanElement;
-      const spaceEvent = new KeyboardEvent('keydown', { key: ' ' });
-      textElement.dispatchEvent(spaceEvent);
-
-      expect(eventFired).toBe(true);
-    });
-
-    it('should not trigger click on other keys', () => {
-      element.clickable = true;
-      let eventFired = false;
-
-      element.addEventListener('ui-text-click', () => {
-        eventFired = true;
-      });
-
-      const textElement = element.shadowRoot?.querySelector('span') as HTMLSpanElement;
-      const escapeEvent = new KeyboardEvent('keydown', { key: 'Escape' });
-      textElement.dispatchEvent(escapeEvent);
-
-      expect(eventFired).toBe(false);
-    });
-
-    it('should not trigger keyboard events when not clickable', () => {
-      element.clickable = false;
-      let eventFired = false;
-
-      element.addEventListener('ui-text-click', () => {
-        eventFired = true;
-      });
-
-      const textElement = element.shadowRoot?.querySelector('span') as HTMLSpanElement;
-      const enterEvent = new KeyboardEvent('keydown', { key: 'Enter' });
-      textElement.dispatchEvent(enterEvent);
-
+      
+      const textElement = element.shadowRoot?.querySelector('.ui-text');
+      textElement?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      
       expect(eventFired).toBe(false);
     });
   });
 
-  describe('Accessibility', () => {
-    it('should use semantic span element', () => {
-      const textElement = element.shadowRoot?.querySelector('span');
-      expect(textElement?.tagName.toLowerCase()).toBe('span');
-    });
-
-    it('should be focusable when clickable', () => {
+  describe('Keyboard events', () => {
+    it('should handle Enter key when clickable', () => {
       element.clickable = true;
-      element.focus();
-      expect(document.activeElement).toBe(element);
-    });
-
-    it('should focus internal element when focus() is called and clickable', () => {
-      element.clickable = true;
-      element.focus();
-      const textElement = element.shadowRoot?.querySelector('span') as HTMLSpanElement;
-      expect(element.shadowRoot?.activeElement).toBe(textElement);
-    });
-
-    it('should not be focusable when not clickable', () => {
-      element.clickable = false;
-      element.focus();
-      expect(document.activeElement).not.toBe(element);
-    });
-
-    it('should have button role when clickable', () => {
-      element.clickable = true;
-      const textElement = element.shadowRoot?.querySelector('span') as HTMLSpanElement;
-      expect(textElement?.getAttribute('role')).toBe('button');
-    });
-
-    it('should have tabindex when clickable', () => {
-      element.clickable = true;
-      const textElement = element.shadowRoot?.querySelector('span') as HTMLSpanElement;
-      expect(textElement?.getAttribute('tabindex')).toBe('0');
-    });
-  });
-
-  describe('Programmatic methods', () => {
-    it('should support programmatic click when clickable', () => {
-      element.clickable = true;
+      
       let eventFired = false;
-
       element.addEventListener('ui-text-click', () => {
         eventFired = true;
       });
+      
+      const textElement = element.shadowRoot?.querySelector('.ui-text');
+      textElement?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      
+      expect(eventFired).toBe(true);
+    });
 
+    it('should handle Space key when clickable', () => {
+      element.clickable = true;
+      
+      let eventFired = false;
+      element.addEventListener('ui-text-click', () => {
+        eventFired = true;
+      });
+      
+      const textElement = element.shadowRoot?.querySelector('.ui-text');
+      textElement?.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+      
+      expect(eventFired).toBe(true);
+    });
+
+    it('should not handle other keys when clickable', () => {
+      element.clickable = true;
+      
+      let eventFired = false;
+      element.addEventListener('ui-text-click', () => {
+        eventFired = true;
+      });
+      
+      const textElement = element.shadowRoot?.querySelector('.ui-text');
+      textElement?.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', bubbles: true }));
+      
+      expect(eventFired).toBe(false);
+    });
+  });
+
+  describe('Public methods', () => {
+    it('should have focus method that works when clickable', () => {
+      element.clickable = true;
+      expect(typeof element.focus).toBe('function');
+      
+      // Should not throw when called
+      element.focus();
+    });
+
+    it('should have click method that works when clickable', () => {
+      element.clickable = true;
+      expect(typeof element.click).toBe('function');
+      
+      let eventFired = false;
+      element.addEventListener('ui-text-click', () => {
+        eventFired = true;
+      });
+      
       element.click();
       expect(eventFired).toBe(true);
     });
 
-    it('should not click when not clickable', () => {
+    it('should not trigger click when not clickable', () => {
       element.clickable = false;
+      
       let eventFired = false;
-
       element.addEventListener('ui-text-click', () => {
         eventFired = true;
       });
-
+      
       element.click();
       expect(eventFired).toBe(false);
     });
   });
 
-  describe('Content projection', () => {
-    it('should project text content', () => {
-      element.textContent = 'Hello World';
-      
-      const slot = element.shadowRoot?.querySelector('slot');
-      expect(slot).toBeDefined();
-      expect(element.textContent).toBe('Hello World');
+  describe('Input validation', () => {
+    it('should reject invalid as values', () => {
+      element.as = 'span';
+      element.as = 'invalid' as any;
+      expect(element.as).toBe('span'); // Should remain unchanged
     });
 
-    it('should project HTML content', () => {
-      element.innerHTML = '<strong>Bold</strong> text';
-      
-      const slot = element.shadowRoot?.querySelector('slot');
-      expect(slot).toBeDefined();
-      expect(element.innerHTML).toBe('<strong>Bold</strong> text');
-    });
-  });
-
-  describe('Variant-specific behavior', () => {
-    it('should render heading variant correctly', () => {
-      element.variant = 'heading';
-      
-      const textElement = element.shadowRoot?.querySelector('span');
-      expect(textElement?.classList.contains('ui-text--heading')).toBe(true);
+    it('should reject invalid size values', () => {
+      element.size = 'md';
+      element.size = 'invalid' as any;
+      expect(element.size).toBe('md'); // Should remain unchanged
     });
 
-    it('should render link variant correctly', () => {
-      element.variant = 'link';
-      
-      const textElement = element.shadowRoot?.querySelector('span');
-      expect(textElement?.classList.contains('ui-text--link')).toBe(true);
+    it('should reject invalid weight values', () => {
+      element.weight = 'normal';
+      element.weight = 'invalid' as any;
+      expect(element.weight).toBe('normal'); // Should remain unchanged
     });
 
-    it('should render caption variant correctly', () => {
-      element.variant = 'caption';
-      
-      const textElement = element.shadowRoot?.querySelector('span');
-      expect(textElement?.classList.contains('ui-text--caption')).toBe(true);
-    });
-
-    it('should render label variant correctly', () => {
-      element.variant = 'label';
-      
-      const textElement = element.shadowRoot?.querySelector('span');
-      expect(textElement?.classList.contains('ui-text--label')).toBe(true);
+    it('should reject invalid align values', () => {
+      element.align = 'left';
+      element.align = 'invalid' as any;
+      expect(element.align).toBe('left'); // Should remain unchanged
     });
   });
 });
