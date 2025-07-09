@@ -15,8 +15,8 @@
   --ui-text-color-warning: hsl(25, 95%, 53%);
   
   /* Font families */
-  --ui-text-font-family-default: inherit;
-  --ui-text-font-family-heading: inherit;
+  --ui-text-font-family-default: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --ui-text-font-family-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --ui-text-font-family-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
   
   /* Font sizes */
@@ -55,11 +55,11 @@
 
 /* Base text styles */
 .ui-text {
-  font-family: var(--ui-text-font-family-default);
-  color: var(--ui-text-color-default);
+  font-family: var(--ui-text-font-family-default, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  color: var(--ui-text-color-default, hsl(0, 0%, 10%));
   margin: 0;
   padding: 0;
-  transition: var(--ui-text-transition);
+  transition: var(--ui-text-transition, color 0.15s ease-in-out);
   display: inline;
 }
 
@@ -67,93 +67,93 @@
 
 /* Heading elements */
 .ui-text--h1, .ui-text--h2, .ui-text--h3, .ui-text--h4, .ui-text--h5, .ui-text--h6 {
-  font-family: var(--ui-text-font-family-heading);
-  color: var(--ui-text-color-default);
-  font-weight: var(--ui-text-font-weight-semibold);
+  font-family: var(--ui-text-font-family-heading, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  color: var(--ui-text-color-default, hsl(0, 0%, 10%));
+  font-weight: var(--ui-text-font-weight-semibold, 600);
   display: block;
   margin: 0;
 }
 
 .ui-text--h1 {
-  font-size: var(--ui-text-font-size-4xl);
-  line-height: var(--ui-text-line-height-4xl);
-  font-weight: var(--ui-text-font-weight-bold);
+  font-size: var(--ui-text-font-size-4xl, 2.25rem);
+  line-height: var(--ui-text-line-height-4xl, 2.5rem);
+  font-weight: var(--ui-text-font-weight-bold, 700);
 }
 
 .ui-text--h2 {
-  font-size: var(--ui-text-font-size-3xl);
-  line-height: var(--ui-text-line-height-3xl);
-  font-weight: var(--ui-text-font-weight-bold);
+  font-size: var(--ui-text-font-size-3xl, 1.875rem);
+  line-height: var(--ui-text-line-height-3xl, 2.25rem);
+  font-weight: var(--ui-text-font-weight-bold, 700);
 }
 
 .ui-text--h3 {
-  font-size: var(--ui-text-font-size-2xl);
-  line-height: var(--ui-text-line-height-2xl);
-  font-weight: var(--ui-text-font-weight-semibold);
+  font-size: var(--ui-text-font-size-2xl, 1.5rem);
+  line-height: var(--ui-text-line-height-2xl, 2rem);
+  font-weight: var(--ui-text-font-weight-semibold, 600);
 }
 
 .ui-text--h4 {
-  font-size: var(--ui-text-font-size-xl);
-  line-height: var(--ui-text-line-height-xl);
-  font-weight: var(--ui-text-font-weight-semibold);
+  font-size: var(--ui-text-font-size-xl, 1.25rem);
+  line-height: var(--ui-text-line-height-xl, 1.75rem);
+  font-weight: var(--ui-text-font-weight-semibold, 600);
 }
 
 .ui-text--h5 {
-  font-size: var(--ui-text-font-size-lg);
-  line-height: var(--ui-text-line-height-lg);
-  font-weight: var(--ui-text-font-weight-semibold);
+  font-size: var(--ui-text-font-size-lg, 1.125rem);
+  line-height: var(--ui-text-line-height-lg, 1.75rem);
+  font-weight: var(--ui-text-font-weight-semibold, 600);
 }
 
 .ui-text--h6 {
-  font-size: var(--ui-text-font-size-md);
-  line-height: var(--ui-text-line-height-md);
-  font-weight: var(--ui-text-font-weight-semibold);
+  font-size: var(--ui-text-font-size-md, 1rem);
+  line-height: var(--ui-text-line-height-md, 1.5rem);
+  font-weight: var(--ui-text-font-weight-semibold, 600);
 }
 
 /* Paragraph element */
 .ui-text--p {
-  font-family: var(--ui-text-font-family-default);
-  color: var(--ui-text-color-default);
+  font-family: var(--ui-text-font-family-default, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  color: var(--ui-text-color-default, hsl(0, 0%, 10%));
   display: block;
   margin: 0;
 }
 
 /* Span element (inline text) */
 .ui-text--span {
-  font-family: var(--ui-text-font-family-default);
-  color: var(--ui-text-color-default);
+  font-family: var(--ui-text-font-family-default, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  color: var(--ui-text-color-default, hsl(0, 0%, 10%));
   display: inline;
 }
 
 /* Strong element */
 .ui-text--strong {
-  font-family: var(--ui-text-font-family-default);
-  color: var(--ui-text-color-default);
-  font-weight: var(--ui-text-font-weight-bold);
+  font-family: var(--ui-text-font-family-default, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  color: var(--ui-text-color-default, hsl(0, 0%, 10%));
+  font-weight: var(--ui-text-font-weight-bold, 700);
   display: inline;
 }
 
 /* Emphasis element */
 .ui-text--em {
-  font-family: var(--ui-text-font-family-default);
-  color: var(--ui-text-color-default);
+  font-family: var(--ui-text-font-family-default, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  color: var(--ui-text-color-default, hsl(0, 0%, 10%));
   font-style: italic;
   display: inline;
 }
 
 /* Small element */
 .ui-text--small {
-  font-family: var(--ui-text-font-family-default);
-  color: var(--ui-text-color-secondary);
-  font-size: var(--ui-text-font-size-sm);
-  line-height: var(--ui-text-line-height-sm);
+  font-family: var(--ui-text-font-family-default, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  color: var(--ui-text-color-secondary, hsl(220, 9%, 46%));
+  font-size: var(--ui-text-font-size-sm, 0.875rem);
+  line-height: var(--ui-text-line-height-sm, 1.25rem);
   display: inline;
 }
 
 /* Code element */
 .ui-text--code {
-  font-family: var(--ui-text-font-family-mono);
-  color: var(--ui-text-color-default);
+  font-family: var(--ui-text-font-family-mono, 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace);
+  color: var(--ui-text-color-default, hsl(0, 0%, 10%));
   background-color: hsl(220, 13%, 95%);
   padding: 0.125rem 0.25rem;
   border-radius: 0.25rem;
@@ -170,70 +170,70 @@
 
 /* Size variants */
 .ui-text--xs {
-  font-size: var(--ui-text-font-size-xs);
-  line-height: var(--ui-text-line-height-xs);
+  font-size: var(--ui-text-font-size-xs, 0.75rem);
+  line-height: var(--ui-text-line-height-xs, 1rem);
 }
 
 .ui-text--sm {
-  font-size: var(--ui-text-font-size-sm);
-  line-height: var(--ui-text-line-height-sm);
+  font-size: var(--ui-text-font-size-sm, 0.875rem);
+  line-height: var(--ui-text-line-height-sm, 1.25rem);
 }
 
 .ui-text--md {
-  font-size: var(--ui-text-font-size-md);
-  line-height: var(--ui-text-line-height-md);
+  font-size: var(--ui-text-font-size-md, 1rem);
+  line-height: var(--ui-text-line-height-md, 1.5rem);
 }
 
 .ui-text--lg {
-  font-size: var(--ui-text-font-size-lg);
-  line-height: var(--ui-text-line-height-lg);
+  font-size: var(--ui-text-font-size-lg, 1.125rem);
+  line-height: var(--ui-text-line-height-lg, 1.75rem);
 }
 
 .ui-text--xl {
-  font-size: var(--ui-text-font-size-xl);
-  line-height: var(--ui-text-line-height-xl);
+  font-size: var(--ui-text-font-size-xl, 1.25rem);
+  line-height: var(--ui-text-line-height-xl, 1.75rem);
 }
 
 .ui-text--2xl {
-  font-size: var(--ui-text-font-size-2xl);
-  line-height: var(--ui-text-line-height-2xl);
+  font-size: var(--ui-text-font-size-2xl, 1.5rem);
+  line-height: var(--ui-text-line-height-2xl, 2rem);
 }
 
 .ui-text--3xl {
-  font-size: var(--ui-text-font-size-3xl);
-  line-height: var(--ui-text-line-height-3xl);
+  font-size: var(--ui-text-font-size-3xl, 1.875rem);
+  line-height: var(--ui-text-line-height-3xl, 2.25rem);
 }
 
 .ui-text--4xl {
-  font-size: var(--ui-text-font-size-4xl);
-  line-height: var(--ui-text-line-height-4xl);
+  font-size: var(--ui-text-font-size-4xl, 2.25rem);
+  line-height: var(--ui-text-line-height-4xl, 2.5rem);
 }
 
 .ui-text--5xl {
-  font-size: var(--ui-text-font-size-5xl);
-  line-height: var(--ui-text-line-height-5xl);
+  font-size: var(--ui-text-font-size-5xl, 3rem);
+  line-height: var(--ui-text-line-height-5xl, 1);
 }
 
 .ui-text--6xl {
-  font-size: var(--ui-text-font-size-6xl);
-  line-height: var(--ui-text-line-height-6xl);
+  font-size: var(--ui-text-font-size-6xl, 3.75rem);
+  line-height: var(--ui-text-line-height-6xl, 1);
 }
 
 /* Weight variants */
 .ui-text--normal {
-  font-weight: var(--ui-text-font-weight-normal);
+  font-weight: var(--ui-text-font-weight-normal, 400);
 }
 
 .ui-text--medium {
-  font-weight: var(--ui-text-font-weight-medium);
+  font-weight: var(--ui-text-font-weight-medium, 500);
 }
 
 .ui-text--semibold {
-  font-weight: var(--ui-text-font-weight-semibold);
+  font-weight: var(--ui-text-font-weight-semibold, 600);
 }
 
 .ui-text--bold {
-  font-weight: var(--ui-text-font-weight-bold);
+  font-weight: var(--ui-text-font-weight-bold, 700);
 }
 
 /* Alignment variants */
