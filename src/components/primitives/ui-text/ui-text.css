@@ -1,0 +1,291 @@
+/* ui-text component styles */
+
+/* Host element */
+:host {
+  display: contents;
+  
+  /* CSS Custom Properties for theming */
+  --ui-text-color-default: hsl(0, 0%, 10%);
+  --ui-text-color-secondary: hsl(220, 9%, 46%);
+  --ui-text-color-muted: hsl(220, 9%, 64%);
+  --ui-text-color-link: hsl(217, 91%, 60%);
+  --ui-text-color-link-hover: hsl(217, 91%, 50%);
+  --ui-text-color-error: hsl(0, 84%, 60%);
+  --ui-text-color-success: hsl(142, 71%, 45%);
+  --ui-text-color-warning: hsl(25, 95%, 53%);
+  
+  /* Font families */
+  --ui-text-font-family-default: inherit;
+  --ui-text-font-family-heading: inherit;
+  --ui-text-font-family-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  
+  /* Font sizes */
+  --ui-text-font-size-xs: 0.75rem;
+  --ui-text-font-size-sm: 0.875rem;
+  --ui-text-font-size-md: 1rem;
+  --ui-text-font-size-lg: 1.125rem;
+  --ui-text-font-size-xl: 1.25rem;
+  --ui-text-font-size-2xl: 1.5rem;
+  --ui-text-font-size-3xl: 1.875rem;
+  --ui-text-font-size-4xl: 2.25rem;
+  --ui-text-font-size-5xl: 3rem;
+  --ui-text-font-size-6xl: 3.75rem;
+  
+  /* Line heights */
+  --ui-text-line-height-xs: 1rem;
+  --ui-text-line-height-sm: 1.25rem;
+  --ui-text-line-height-md: 1.5rem;
+  --ui-text-line-height-lg: 1.75rem;
+  --ui-text-line-height-xl: 1.75rem;
+  --ui-text-line-height-2xl: 2rem;
+  --ui-text-line-height-3xl: 2.25rem;
+  --ui-text-line-height-4xl: 2.5rem;
+  --ui-text-line-height-5xl: 1;
+  --ui-text-line-height-6xl: 1;
+  
+  /* Font weights */
+  --ui-text-font-weight-normal: 400;
+  --ui-text-font-weight-medium: 500;
+  --ui-text-font-weight-semibold: 600;
+  --ui-text-font-weight-bold: 700;
+  
+  /* Transitions */
+  --ui-text-transition: color 0.15s ease-in-out;
+}
+
+/* Base text styles */
+.ui-text {
+  font-family: var(--ui-text-font-family-default);
+  color: var(--ui-text-color-default);
+  margin: 0;
+  padding: 0;
+  transition: var(--ui-text-transition);
+  display: inline;
+}
+
+/* Variant styles */
+.ui-text--body {
+  font-family: var(--ui-text-font-family-default);
+  color: var(--ui-text-color-default);
+}
+
+.ui-text--heading {
+  font-family: var(--ui-text-font-family-heading);
+  color: var(--ui-text-color-default);
+  font-weight: var(--ui-text-font-weight-semibold);
+}
+
+.ui-text--caption {
+  font-family: var(--ui-text-font-family-default);
+  color: var(--ui-text-color-secondary);
+  font-weight: var(--ui-text-font-weight-normal);
+}
+
+.ui-text--label {
+  font-family: var(--ui-text-font-family-default);
+  color: var(--ui-text-color-default);
+  font-weight: var(--ui-text-font-weight-medium);
+}
+
+.ui-text--link {
+  font-family: var(--ui-text-font-family-default);
+  color: var(--ui-text-color-link);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.ui-text--link:hover {
+  color: var(--ui-text-color-link-hover);
+}
+
+/* Size variants */
+.ui-text--xs {
+  font-size: var(--ui-text-font-size-xs);
+  line-height: var(--ui-text-line-height-xs);
+}
+
+.ui-text--sm {
+  font-size: var(--ui-text-font-size-sm);
+  line-height: var(--ui-text-line-height-sm);
+}
+
+.ui-text--md {
+  font-size: var(--ui-text-font-size-md);
+  line-height: var(--ui-text-line-height-md);
+}
+
+.ui-text--lg {
+  font-size: var(--ui-text-font-size-lg);
+  line-height: var(--ui-text-line-height-lg);
+}
+
+.ui-text--xl {
+  font-size: var(--ui-text-font-size-xl);
+  line-height: var(--ui-text-line-height-xl);
+}
+
+.ui-text--2xl {
+  font-size: var(--ui-text-font-size-2xl);
+  line-height: var(--ui-text-line-height-2xl);
+}
+
+.ui-text--3xl {
+  font-size: var(--ui-text-font-size-3xl);
+  line-height: var(--ui-text-line-height-3xl);
+}
+
+.ui-text--4xl {
+  font-size: var(--ui-text-font-size-4xl);
+  line-height: var(--ui-text-line-height-4xl);
+}
+
+.ui-text--5xl {
+  font-size: var(--ui-text-font-size-5xl);
+  line-height: var(--ui-text-line-height-5xl);
+}
+
+.ui-text--6xl {
+  font-size: var(--ui-text-font-size-6xl);
+  line-height: var(--ui-text-line-height-6xl);
+}
+
+/* Weight variants */
+.ui-text--normal {
+  font-weight: var(--ui-text-font-weight-normal);
+}
+
+.ui-text--medium {
+  font-weight: var(--ui-text-font-weight-medium);
+}
+
+.ui-text--semibold {
+  font-weight: var(--ui-text-font-weight-semibold);
+}
+
+.ui-text--bold {
+  font-weight: var(--ui-text-font-weight-bold);
+}
+
+/* Alignment variants */
+.ui-text--left {
+  text-align: left;
+}
+
+.ui-text--center {
+  text-align: center;
+}
+
+.ui-text--right {
+  text-align: right;
+}
+
+.ui-text--justify {
+  text-align: justify;
+}
+
+/* Truncate modifier */
+.ui-text--truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  max-width: 100%;
+}
+
+/* Clickable modifier */
+.ui-text--clickable {
+  cursor: pointer;
+  user-select: none;
+  transition: var(--ui-text-transition);
+}
+
+.ui-text--clickable:hover {
+  opacity: 0.8;
+}
+
+.ui-text--clickable:focus {
+  outline: 2px solid var(--ui-text-color-link);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.ui-text--clickable:active {
+  transform: translateY(1px);
+}
+
+/* Focus styles for accessibility */
+.ui-text:focus-visible {
+  outline: 2px solid var(--ui-text-color-link);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 768px) {
+  .ui-text--6xl {
+    font-size: var(--ui-text-font-size-5xl);
+    line-height: var(--ui-text-line-height-5xl);
+  }
+  
+  .ui-text--5xl {
+    font-size: var(--ui-text-font-size-4xl);
+    line-height: var(--ui-text-line-height-4xl);
+  }
+  
+  .ui-text--4xl {
+    font-size: var(--ui-text-font-size-3xl);
+    line-height: var(--ui-text-line-height-3xl);
+  }
+}
+
+/* Accessibility and motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .ui-text {
+    transition: none;
+  }
+  
+  .ui-text--clickable:active {
+    transform: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .ui-text--link {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :host {
+    --ui-text-color-default: hsl(210, 20%, 98%);
+    --ui-text-color-secondary: hsl(220, 9%, 64%);
+    --ui-text-color-muted: hsl(220, 9%, 46%);
+    --ui-text-color-link: hsl(213, 93%, 68%);
+    --ui-text-color-link-hover: hsl(213, 93%, 78%);
+    --ui-text-color-error: hsl(0, 84%, 70%);
+    --ui-text-color-success: hsl(142, 71%, 65%);
+    --ui-text-color-warning: hsl(45, 93%, 58%);
+  }
+}
+
+/* Selection styles */
+.ui-text::selection {
+  background-color: var(--ui-text-color-link);
+  color: hsl(0, 0%, 100%);
+}
+
+/* Print styles */
+@media print {
+  .ui-text {
+    color: hsl(0, 0%, 0%) !important;
+    background: none !important;
+  }
+  
+  .ui-text--link {
+    text-decoration: underline;
+    color: hsl(0, 0%, 0%) !important;
+  }
+}
