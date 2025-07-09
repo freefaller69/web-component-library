@@ -61,6 +61,10 @@
   padding: 0;
   transition: var(--ui-text-transition, color 0.15s ease-in-out);
   display: inline;
+  
+  /* Ensure color inheritance works properly in Shadow DOM */
+  -webkit-text-fill-color: initial;
+  -webkit-text-stroke-color: initial;
 }
 
 /* Element-specific styles */
@@ -330,7 +334,7 @@
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   :host {
-    --ui-text-color-default: hsl(210, 20%, 98%);
+    --ui-text-color-default: hsl(0, 0%, 96%);
     --ui-text-color-secondary: hsl(220, 9%, 64%);
     --ui-text-color-muted: hsl(220, 9%, 46%);
     --ui-text-color-link: hsl(213, 93%, 68%);
