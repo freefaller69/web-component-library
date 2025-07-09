@@ -1,0 +1,1 @@
+export { UiIcon, type UiIconEventDetail, renderUiIconSSR } from "./ui-icon.js";

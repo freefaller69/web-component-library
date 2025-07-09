@@ -1,0 +1,141 @@
+/* ui-icon - Icon component styles */
+.ui-icon {
+  display: inline-block;
+  line-height: 1;
+  vertical-align: middle;
+  color: var(--ui-icon-color, currentColor);
+  transition: var(--ui-icon-transition, color 0.2s ease);
+}
+
+.ui-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Size variants */
+.ui-icon--xs {
+  width: var(--ui-icon-size-xs, 0.75rem);
+  height: var(--ui-icon-size-xs, 0.75rem);
+}
+
+.ui-icon--sm {
+  width: var(--ui-icon-size-sm, 0.875rem);
+  height: var(--ui-icon-size-sm, 0.875rem);
+}
+
+.ui-icon--md {
+  width: var(--ui-icon-size-md, 1rem);
+  height: var(--ui-icon-size-md, 1rem);
+}
+
+.ui-icon--lg {
+  width: var(--ui-icon-size-lg, 1.25rem);
+  height: var(--ui-icon-size-lg, 1.25rem);
+}
+
+.ui-icon--xl {
+  width: var(--ui-icon-size-xl, 1.5rem);
+  height: var(--ui-icon-size-xl, 1.5rem);
+}
+
+.ui-icon--2xl {
+  width: var(--ui-icon-size-2xl, 2rem);
+  height: var(--ui-icon-size-2xl, 2rem);
+}
+
+.ui-icon--3xl {
+  width: var(--ui-icon-size-3xl, 2.5rem);
+  height: var(--ui-icon-size-3xl, 2.5rem);
+}
+
+.ui-icon--4xl {
+  width: var(--ui-icon-size-4xl, 3rem);
+  height: var(--ui-icon-size-4xl, 3rem);
+}
+
+.ui-icon--5xl {
+  width: var(--ui-icon-size-5xl, 3.5rem);
+  height: var(--ui-icon-size-5xl, 3.5rem);
+}
+
+.ui-icon--6xl {
+  width: var(--ui-icon-size-6xl, 4rem);
+  height: var(--ui-icon-size-6xl, 4rem);
+}
+
+/* Clickable state */
+.ui-icon--clickable {
+  cursor: pointer;
+  user-select: none;
+  border-radius: var(--ui-icon-border-radius, 0.25rem);
+  transition: var(--ui-icon-clickable-transition, all 0.2s ease);
+}
+
+.ui-icon--clickable:hover {
+  color: var(--ui-icon-hover-color, hsl(220, 85%, 57%));
+  background-color: var(--ui-icon-hover-background, hsl(220, 13%, 95%));
+}
+
+.ui-icon--clickable:active {
+  color: var(--ui-icon-active-color, hsl(220, 85%, 52%));
+  background-color: var(--ui-icon-active-background, hsl(220, 13%, 91%));
+  transform: var(--ui-icon-active-transform, scale(0.95));
+}
+
+.ui-icon--clickable:focus {
+  outline: var(--ui-icon-focus-outline, 2px solid hsl(220, 85%, 57%));
+  outline-offset: var(--ui-icon-focus-outline-offset, 2px);
+}
+
+.ui-icon--clickable:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .ui-icon--clickable:hover {
+    color: var(--ui-icon-hover-color-dark, hsl(220, 85%, 62%));
+    background-color: var(--ui-icon-hover-background-dark, hsl(220, 13%, 18%));
+  }
+
+  .ui-icon--clickable:active {
+    color: var(--ui-icon-active-color-dark, hsl(220, 85%, 67%));
+    background-color: var(--ui-icon-active-background-dark, hsl(220, 13%, 22%));
+  }
+
+  .ui-icon--clickable:focus {
+    outline-color: var(--ui-icon-focus-outline-color-dark, hsl(220, 85%, 62%));
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .ui-icon,
+  .ui-icon--clickable {
+    transition: none;
+  }
+  
+  .ui-icon--clickable:active {
+    transform: none;
+  }
+}
+
+/* High contrast support */
+@media (prefers-contrast: high) {
+  .ui-icon--clickable:focus {
+    outline-width: 3px;
+    outline-color: currentColor;
+  }
+}
+
+/* Print styles */
+@media print {
+  .ui-icon {
+    color: black;
+  }
+  
+  .ui-icon--clickable {
+    cursor: default;
+  }
+}
