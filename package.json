@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@storybook/addon-docs": "^9.0.15",
+    "@storybook/addon-themes": "^9.0.16",
     "@storybook/html-vite": "^9.0.15",
     "@vitest/ui": "^3.2.4",
     "jsdom": "^26.1.0",
