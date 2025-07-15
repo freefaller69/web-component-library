@@ -27,6 +27,9 @@ dist-ssr
 *storybook.log
 storybook-static
 
+# Coverage
+coverage
+
 # Project files
 pnpm-lock.yaml
 CLAUDE.md
