@@ -265,7 +265,11 @@ export class UiBox extends ShadowComponent {
       .replace(/{role}/g, this.clickable ? 'role="button"' : "");
 
     this.setContent(html);
-    this._setupEventListeners();
+    
+    // Setup event listeners after content is rendered
+    if (this.isConnected) {
+      this._setupEventListeners();
+    }
   }
 
   protected getStyles(): string {
@@ -290,6 +294,10 @@ export class UiBox extends ShadowComponent {
   }
 
   private _setupEventListeners(): void {
+    // Remove any existing event listeners
+    this.removeManagedEventListener("click");
+    this.removeManagedEventListener("keydown");
+    
     if (this.clickable) {
       const boxElement = this.shadowQuerySelector(".ui-box");
       if (boxElement) {

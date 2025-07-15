@@ -43,7 +43,7 @@ describe('ui-box', () => {
     it('should have proper shadow DOM structure', () => {
       expect(element.shadowRoot).toBeDefined();
       
-      const boxElement = element.shadowRoot?.querySelector('div');
+      const boxElement = element.shadowRoot?.querySelector('.ui-box');
       expect(boxElement).toBeDefined();
       expect(boxElement?.classList.contains('ui-box')).toBe(true);
       expect(boxElement?.classList.contains('ui-box--p-none')).toBe(true);
@@ -78,7 +78,7 @@ describe('ui-box', () => {
       it('should update CSS classes when padding changes', () => {
         element.padding = 'md';
         
-        const boxElement = element.shadowRoot?.querySelector('div');
+        const boxElement = element.shadowRoot?.querySelector('.ui-box');
         expect(boxElement?.classList.contains('ui-box--p-md')).toBe(true);
         expect(boxElement?.classList.contains('ui-box--p-none')).toBe(false);
       });
@@ -105,7 +105,7 @@ describe('ui-box', () => {
       it('should update CSS classes when margin changes', () => {
         element.margin = 'lg';
         
-        const boxElement = element.shadowRoot?.querySelector('div');
+        const boxElement = element.shadowRoot?.querySelector('.ui-box');
         expect(boxElement?.classList.contains('ui-box--m-lg')).toBe(true);
         expect(boxElement?.classList.contains('ui-box--m-none')).toBe(false);
       });
@@ -132,7 +132,7 @@ describe('ui-box', () => {
       it('should update CSS classes when radius changes', () => {
         element.radius = 'md';
         
-        const boxElement = element.shadowRoot?.querySelector('div');
+        const boxElement = element.shadowRoot?.querySelector('.ui-box');
         expect(boxElement?.classList.contains('ui-box--radius-md')).toBe(true);
         expect(boxElement?.classList.contains('ui-box--radius-none')).toBe(false);
       });
@@ -159,7 +159,7 @@ describe('ui-box', () => {
       it('should update CSS classes when shadow changes', () => {
         element.shadow = 'md';
         
-        const boxElement = element.shadowRoot?.querySelector('div');
+        const boxElement = element.shadowRoot?.querySelector('.ui-box');
         expect(boxElement?.classList.contains('ui-box--shadow-md')).toBe(true);
         expect(boxElement?.classList.contains('ui-box--shadow-none')).toBe(false);
       });
@@ -186,7 +186,7 @@ describe('ui-box', () => {
       it('should apply inline style when background is set', () => {
         element.background = 'hsl(0, 100%, 50%)';
         
-        const boxElement = element.shadowRoot?.querySelector('div');
+        const boxElement = element.shadowRoot?.querySelector('.ui-box');
         expect(boxElement?.getAttribute('style')).toContain('background: hsl(0, 100%, 50%)');
       });
     });
@@ -205,7 +205,7 @@ describe('ui-box', () => {
       it('should apply inline style when border is set', () => {
         element.border = '1px solid hsl(0, 0%, 50%)';
         
-        const boxElement = element.shadowRoot?.querySelector('div');
+        const boxElement = element.shadowRoot?.querySelector('.ui-box');
         expect(boxElement?.getAttribute('style')).toContain('border: 1px solid hsl(0, 0%, 50%)');
       });
     });
@@ -224,7 +224,7 @@ describe('ui-box', () => {
       it('should apply inline style when width is set', () => {
         element.width = '200px';
         
-        const boxElement = element.shadowRoot?.querySelector('div');
+        const boxElement = element.shadowRoot?.querySelector('.ui-box');
         expect(boxElement?.getAttribute('style')).toContain('width: 200px');
       });
     });
@@ -243,7 +243,7 @@ describe('ui-box', () => {
       it('should apply inline style when height is set', () => {
         element.height = '100px';
         
-        const boxElement = element.shadowRoot?.querySelector('div');
+        const boxElement = element.shadowRoot?.querySelector('.ui-box');
         expect(boxElement?.getAttribute('style')).toContain('height: 100px');
       });
     });
@@ -262,7 +262,7 @@ describe('ui-box', () => {
       it('should apply inline style when overflow is set', () => {
         element.overflow = 'hidden';
         
-        const boxElement = element.shadowRoot?.querySelector('div');
+        const boxElement = element.shadowRoot?.querySelector('.ui-box');
         expect(boxElement?.getAttribute('style')).toContain('overflow: hidden');
       });
     });
@@ -281,7 +281,7 @@ describe('ui-box', () => {
       it('should apply inline style when display is set', () => {
         element.display = 'flex';
         
-        const boxElement = element.shadowRoot?.querySelector('div');
+        const boxElement = element.shadowRoot?.querySelector('.ui-box');
         expect(boxElement?.getAttribute('style')).toContain('display: flex');
       });
     });
@@ -314,7 +314,7 @@ describe('ui-box', () => {
         element.alignItems = 'center';
         element.gap = '1rem';
         
-        const boxElement = element.shadowRoot?.querySelector('div');
+        const boxElement = element.shadowRoot?.querySelector('.ui-box');
         const style = boxElement?.getAttribute('style') || '';
         expect(style).toContain('display: flex');
         expect(style).toContain('flex-direction: column');
@@ -338,14 +338,14 @@ describe('ui-box', () => {
       it('should add clickable class when enabled', () => {
         element.clickable = true;
         
-        const boxElement = element.shadowRoot?.querySelector('div');
+        const boxElement = element.shadowRoot?.querySelector('.ui-box');
         expect(boxElement?.classList.contains('ui-box--clickable')).toBe(true);
       });
 
       it('should add tabindex and role when clickable', () => {
         element.clickable = true;
         
-        const boxElement = element.shadowRoot?.querySelector('div');
+        const boxElement = element.shadowRoot?.querySelector('.ui-box');
         expect(boxElement?.getAttribute('tabindex')).toBe('0');
         expect(boxElement?.getAttribute('role')).toBe('button');
       });
@@ -363,7 +363,7 @@ describe('ui-box', () => {
         eventDetail = (event as CustomEvent).detail;
       });
 
-      const boxElement = element.shadowRoot?.querySelector('div') as HTMLDivElement;
+      const boxElement = element.shadowRoot?.querySelector('.ui-box') as HTMLDivElement;
       boxElement.click();
 
       expect(eventFired).toBe(true);
@@ -382,7 +382,7 @@ describe('ui-box', () => {
         eventFired = true;
       });
 
-      const boxElement = element.shadowRoot?.querySelector('div') as HTMLDivElement;
+      const boxElement = element.shadowRoot?.querySelector('.ui-box') as HTMLDivElement;
       boxElement.click();
 
       expect(eventFired).toBe(false);
@@ -396,7 +396,7 @@ describe('ui-box', () => {
         eventFired = true;
       });
 
-      const boxElement = element.shadowRoot?.querySelector('div') as HTMLDivElement;
+      const boxElement = element.shadowRoot?.querySelector('.ui-box') as HTMLDivElement;
       boxElement.click();
 
       expect(eventFired).toBe(true);
@@ -412,7 +412,7 @@ describe('ui-box', () => {
         eventFired = true;
       });
 
-      const boxElement = element.shadowRoot?.querySelector('div') as HTMLDivElement;
+      const boxElement = element.shadowRoot?.querySelector('.ui-box') as HTMLDivElement;
       const enterEvent = new KeyboardEvent('keydown', { key: 'Enter' });
       boxElement.dispatchEvent(enterEvent);
 
@@ -427,7 +427,7 @@ describe('ui-box', () => {
         eventFired = true;
       });
 
-      const boxElement = element.shadowRoot?.querySelector('div') as HTMLDivElement;
+      const boxElement = element.shadowRoot?.querySelector('.ui-box') as HTMLDivElement;
       const spaceEvent = new KeyboardEvent('keydown', { key: ' ' });
       boxElement.dispatchEvent(spaceEvent);
 
@@ -442,7 +442,7 @@ describe('ui-box', () => {
         eventFired = true;
       });
 
-      const boxElement = element.shadowRoot?.querySelector('div') as HTMLDivElement;
+      const boxElement = element.shadowRoot?.querySelector('.ui-box') as HTMLDivElement;
       const escapeEvent = new KeyboardEvent('keydown', { key: 'Escape' });
       boxElement.dispatchEvent(escapeEvent);
 
@@ -457,7 +457,7 @@ describe('ui-box', () => {
         eventFired = true;
       });
 
-      const boxElement = element.shadowRoot?.querySelector('div') as HTMLDivElement;
+      const boxElement = element.shadowRoot?.querySelector('.ui-box') as HTMLDivElement;
       const enterEvent = new KeyboardEvent('keydown', { key: 'Enter' });
       boxElement.dispatchEvent(enterEvent);
 
@@ -467,7 +467,7 @@ describe('ui-box', () => {
 
   describe('Accessibility', () => {
     it('should use semantic div element', () => {
-      const boxElement = element.shadowRoot?.querySelector('div');
+      const boxElement = element.shadowRoot?.querySelector('.ui-box');
       expect(boxElement?.tagName.toLowerCase()).toBe('div');
     });
 
@@ -480,7 +480,7 @@ describe('ui-box', () => {
     it('should focus internal element when focus() is called and clickable', () => {
       element.clickable = true;
       element.focus();
-      const boxElement = element.shadowRoot?.querySelector('div') as HTMLDivElement;
+      const boxElement = element.shadowRoot?.querySelector('.ui-box') as HTMLDivElement;
       expect(element.shadowRoot?.activeElement).toBe(boxElement);
     });
 
@@ -492,13 +492,13 @@ describe('ui-box', () => {
 
     it('should have button role when clickable', () => {
       element.clickable = true;
-      const boxElement = element.shadowRoot?.querySelector('div') as HTMLDivElement;
+      const boxElement = element.shadowRoot?.querySelector('.ui-box') as HTMLDivElement;
       expect(boxElement?.getAttribute('role')).toBe('button');
     });
 
     it('should have tabindex when clickable', () => {
       element.clickable = true;
-      const boxElement = element.shadowRoot?.querySelector('div') as HTMLDivElement;
+      const boxElement = element.shadowRoot?.querySelector('.ui-box') as HTMLDivElement;
       expect(boxElement?.getAttribute('tabindex')).toBe('0');
     });
   });
@@ -555,7 +555,7 @@ describe('ui-box', () => {
       element.alignItems = 'center';
       element.gap = '1rem';
       
-      const boxElement = element.shadowRoot?.querySelector('div');
+      const boxElement = element.shadowRoot?.querySelector('.ui-box');
       const style = boxElement?.getAttribute('style') || '';
       expect(style).toContain('display: flex');
       expect(style).toContain('flex-direction: column');
@@ -569,7 +569,7 @@ describe('ui-box', () => {
       element.width = '200px';
       element.height = '100px';
       
-      const boxElement = element.shadowRoot?.querySelector('div');
+      const boxElement = element.shadowRoot?.querySelector('.ui-box');
       const style = boxElement?.getAttribute('style') || '';
       expect(style).toContain('overflow: auto');
       expect(style).toContain('width: 200px');
@@ -586,7 +586,7 @@ describe('ui-box', () => {
       element.radius = 'xl';
       element.shadow = 'lg';
       
-      const boxElement = element.shadowRoot?.querySelector('div');
+      const boxElement = element.shadowRoot?.querySelector('.ui-box');
       const style = boxElement?.getAttribute('style') || '';
       expect(style).toContain('background: hsl(200, 100%, 50%)');
       expect(style).toContain('border: 2px solid hsl(0, 0%, 50%)');
