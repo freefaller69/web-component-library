@@ -1,6 +1,5 @@
 /* ui-button component styles */
 
-/* Host element */
 :host {
   display: inline-block;
   
@@ -10,30 +9,13 @@
   --ui-button-color-secondary: #6c757d;
   --ui-button-color-secondary-hover: #545b62;
   --ui-button-color-background: #ffffff;
-  --ui-button-color-text: #212529;
+  --ui-button-color-text: var(--color-text, #212529);
   --ui-button-color-disabled: #6c757d;
   --ui-button-color-disabled-text: #ffffff;
   
   --ui-button-border-radius: 0.375rem;
   --ui-button-font-weight: 500;
   --ui-button-transition: all 0.2s ease-in-out;
-  
-  --ui-button-padding-small: 0.375rem 0.75rem;
-  --ui-button-padding-medium: 0.5rem 1rem;
-  --ui-button-padding-large: 0.75rem 1.5rem;
-  
-  --ui-button-font-size-small: 0.875rem;
-  --ui-button-font-size-medium: 1rem;
-  --ui-button-font-size-large: 1.125rem;
-  
-  --ui-button-height-small: 2rem;
-  --ui-button-height-medium: 2.5rem;
-  --ui-button-height-large: 3rem;
-}
-
-:host([disabled]) {
-  cursor: not-allowed;
-  opacity: 0.65;
 }
 
 /* Base button styles */
@@ -48,18 +30,13 @@
   line-height: 1.5;
   text-decoration: none;
   text-align: center;
-  vertical-align: middle;
   user-select: none;
   
   border: 1px solid transparent;
   border-radius: var(--ui-button-border-radius);
-  
   cursor: pointer;
   transition: var(--ui-button-transition);
-  
   outline: none;
-  position: relative;
-  overflow: hidden;
 }
 
 .ui-button:focus-visible {
@@ -73,72 +50,66 @@
 
 .ui-button:disabled {
   cursor: not-allowed;
-  pointer-events: none;
   background-color: var(--ui-button-color-disabled) !important;
   color: var(--ui-button-color-disabled-text) !important;
   border-color: var(--ui-button-color-disabled) !important;
+  opacity: 0.6;
 }
 
-/* Variant styles */
-.ui-button--primary {
+/* Variant styles using data attributes */
+.ui-button[data-variant="primary"] {
   background-color: var(--ui-button-color-primary);
   color: var(--ui-button-color-background);
   border-color: var(--ui-button-color-primary);
 }
 
-.ui-button--primary:hover:not(:disabled) {
+.ui-button[data-variant="primary"]:hover:not(:disabled) {
   background-color: var(--ui-button-color-primary-hover);
   border-color: var(--ui-button-color-primary-hover);
 }
 
-.ui-button--secondary {
+.ui-button[data-variant="secondary"] {
   background-color: var(--ui-button-color-secondary);
   color: var(--ui-button-color-background);
   border-color: var(--ui-button-color-secondary);
 }
 
-.ui-button--secondary:hover:not(:disabled) {
+.ui-button[data-variant="secondary"]:hover:not(:disabled) {
   background-color: var(--ui-button-color-secondary-hover);
   border-color: var(--ui-button-color-secondary-hover);
 }
 
-.ui-button--ghost {
+.ui-button[data-variant="ghost"] {
   background-color: transparent;
   color: var(--ui-button-color-primary);
   border-color: var(--ui-button-color-primary);
 }
 
-.ui-button--ghost:hover:not(:disabled) {
+.ui-button[data-variant="ghost"]:hover:not(:disabled) {
   background-color: var(--ui-button-color-primary);
   color: var(--ui-button-color-background);
 }
 
-/* Size variants */
-.ui-button--small {
-  padding: var(--ui-button-padding-small);
-  font-size: var(--ui-button-font-size-small);
-  min-height: var(--ui-button-height-small);
+/* Size styles using data attributes */
+.ui-button[data-size="small"] {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  min-height: 2rem;
 }
 
-.ui-button--medium {
-  padding: var(--ui-button-padding-medium);
-  font-size: var(--ui-button-font-size-medium);
-  min-height: var(--ui-button-height-medium);
+.ui-button[data-size="medium"] {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  min-height: 2.5rem;
 }
 
-.ui-button--large {
-  padding: var(--ui-button-padding-large);
-  font-size: var(--ui-button-font-size-large);
-  min-height: var(--ui-button-height-large);
+.ui-button[data-size="large"] {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.125rem;
+  min-height: 3rem;
 }
 
-/* Content and spinner */
-.ui-button__content {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
+/* Loading spinner */
 .ui-button__spinner {
   width: 1em;
   height: 1em;
@@ -150,26 +121,11 @@
 }
 
 @keyframes ui-button-spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/* Loading state */
-:host([loading]) .ui-button__content {
-  opacity: 0.7;
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /* Accessibility and motion preferences */
-@media (prefers-contrast: high) {
-  .ui-button {
-    border-width: 2px;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .ui-button {
     transition: none;
@@ -184,10 +140,9 @@
   }
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  :host {
-    --ui-button-color-background: #1a1a1a;
-    --ui-button-color-text: #ffffff;
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .ui-button {
+    border-width: 2px;
   }
 }

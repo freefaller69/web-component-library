@@ -1,5 +1,4 @@
 import { ShadowComponent } from "../../../core/ShadowComponent.js";
-import templateHtml from "./ui-button.html?raw";
 import buttonCss from "./ui-button.css?inline";
 
 export interface UiButtonEventDetail {
@@ -37,22 +36,18 @@ export class UiButton extends ShadowComponent {
     return this._variant;
   }
   set variant(value: ButtonVariant) {
-    if (["primary", "secondary", "ghost"].includes(value)) {
-      this._variant = value;
-      this.setAttributeSafe("variant", value);
-      this.render();
-    }
+    this._variant = value;
+    this.setAttributeSafe("variant", value);
+    this.render();
   }
 
   get size(): ButtonSize {
     return this._size;
   }
   set size(value: ButtonSize) {
-    if (["small", "medium", "large"].includes(value)) {
-      this._size = value;
-      this.setAttributeSafe("size", value);
-      this.render();
-    }
+    this._size = value;
+    this.setAttributeSafe("size", value);
+    this.render();
   }
 
   get disabled(): boolean {
@@ -95,19 +90,31 @@ export class UiButton extends ShadowComponent {
   }
 
   protected renderShadowContent(): void {
-    const html = templateHtml
-      .replace("{variant}", this.variant)
-      .replace("{size}", this.size)
-      .replace("{disabled}", this.disabled ? "disabled" : "")
-      .replace("{aria-busy}", this.loading ? 'aria-busy="true"' : "")
-      .replace(
-        "{spinner}",
-        this.loading
-          ? '<span class="ui-button__spinner" part="spinner"></span>'
-          : ""
-      );
+    const button = document.createElement("button");
+    button.classList.add("ui-button");
+    button.setAttribute("data-variant", this._variant);
+    button.setAttribute("data-size", this._size);
+    
+    if (this._disabled) {
+      button.disabled = true;
+    }
+    
+    if (this._loading) {
+      button.setAttribute("aria-busy", "true");
+      button.disabled = true;
+    }
 
-    this.setContent(html);
+    // Add spinner for loading state
+    if (this._loading) {
+      const spinner = document.createElement("span");
+      spinner.classList.add("ui-button__spinner");
+      button.appendChild(spinner);
+    }
+
+    const slot = document.createElement("slot");
+    button.appendChild(slot);
+
+    this.setContent(button.outerHTML);
     this._setupEventListeners();
   }
 
@@ -119,11 +126,7 @@ export class UiButton extends ShadowComponent {
     const button = this.shadowQuerySelector(".ui-button") as HTMLButtonElement;
     if (button) {
       this.addManagedEventListener(button, "click", this._handleClick);
-      this.addManagedEventListener(
-        button,
-        "keydown",
-        this._handleKeydown as EventListener
-      );
+      this.addManagedEventListener(button, "keydown", this._handleKeydown as EventListener);
     }
   }
 
@@ -167,28 +170,3 @@ export class UiButton extends ShadowComponent {
 }
 
 customElements.define("ui-button", UiButton);
-
-export function renderUiButtonSSR({
-  variant = "primary",
-  size = "medium",
-  disabled = false,
-  loading = false,
-}: {
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-  disabled?: boolean;
-  loading?: boolean;
-} = {}): string {
-  return `
-    <style>${buttonCss}</style>
-    ${templateHtml
-      .replace("{variant}", variant)
-      .replace("{size}", size)
-      .replace("{disabled}", disabled ? "disabled" : "")
-      .replace("{aria-busy}", loading ? 'aria-busy="true"' : "")
-      .replace(
-        "{spinner}",
-        loading ? '<span class="ui-button__spinner" part="spinner"></span>' : ""
-      )}
-  `;
-}
