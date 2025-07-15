@@ -1,10 +1,7 @@
 import { ShadowComponent } from "../../../core/ShadowComponent.js";
-import templateHtml from "./ui-box.html?raw";
 import boxCss from "./ui-box.css?inline";
 
 export interface UiBoxEventDetail {
-  padding: string;
-  margin: string;
   originalEvent: Event;
 }
 
@@ -14,33 +11,18 @@ declare global {
   }
 }
 
-type BoxSpacing = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl";
-type BoxRadius = "none" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "full";
-type BoxShadow = "none" | "sm" | "md" | "lg" | "xl" | "2xl" | "inner";
+type BoxSpacing = "xs" | "sm" | "md" | "lg" | "xl";
+type BoxRadius = "sm" | "md" | "lg" | "xl" | "full";
+type BoxShadow = "sm" | "md" | "lg" | "xl";
 
 export class UiBox extends ShadowComponent {
   static get observedAttributes(): string[] {
-    return [
-      "padding", "margin", "radius", "shadow", "background", "border", 
-      "width", "height", "overflow", "display", "flex-direction", 
-      "justify-content", "align-items", "gap", "clickable"
-    ];
+    return ["padding", "radius", "shadow", "clickable"];
   }
 
-  private _padding: BoxSpacing = "none";
-  private _margin: BoxSpacing = "none";
-  private _radius: BoxRadius = "none";
-  private _shadow: BoxShadow = "none";
-  private _background = "";
-  private _border = "";
-  private _width = "";
-  private _height = "";
-  private _overflow = "";
-  private _display = "";
-  private _flexDirection = "";
-  private _justifyContent = "";
-  private _alignItems = "";
-  private _gap = "";
+  private _padding: BoxSpacing | null = null;
+  private _radius: BoxRadius | null = null;
+  private _shadow: BoxShadow | null = null;
   private _clickable = false;
 
   constructor() {
@@ -49,137 +31,42 @@ export class UiBox extends ShadowComponent {
     this._handleKeydown = this._handleKeydown.bind(this);
   }
 
-  get padding(): BoxSpacing {
+  get padding(): BoxSpacing | null {
     return this._padding;
   }
-  set padding(value: BoxSpacing) {
-    if (["none", "xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl", "5xl", "6xl"].includes(value)) {
-      this._padding = value;
+  set padding(value: BoxSpacing | null) {
+    this._padding = value;
+    if (value) {
       this.setAttributeSafe("padding", value);
-      this.render();
+    } else {
+      this.removeAttribute("padding");
     }
+    this.render();
   }
 
-  get margin(): BoxSpacing {
-    return this._margin;
-  }
-  set margin(value: BoxSpacing) {
-    if (["none", "xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl", "5xl", "6xl"].includes(value)) {
-      this._margin = value;
-      this.setAttributeSafe("margin", value);
-      this.render();
-    }
-  }
-
-  get radius(): BoxRadius {
+  get radius(): BoxRadius | null {
     return this._radius;
   }
-  set radius(value: BoxRadius) {
-    if (["none", "sm", "md", "lg", "xl", "2xl", "3xl", "full"].includes(value)) {
-      this._radius = value;
+  set radius(value: BoxRadius | null) {
+    this._radius = value;
+    if (value) {
       this.setAttributeSafe("radius", value);
-      this.render();
+    } else {
+      this.removeAttribute("radius");
     }
+    this.render();
   }
 
-  get shadow(): BoxShadow {
+  get shadow(): BoxShadow | null {
     return this._shadow;
   }
-  set shadow(value: BoxShadow) {
-    if (["none", "sm", "md", "lg", "xl", "2xl", "inner"].includes(value)) {
-      this._shadow = value;
+  set shadow(value: BoxShadow | null) {
+    this._shadow = value;
+    if (value) {
       this.setAttributeSafe("shadow", value);
-      this.render();
+    } else {
+      this.removeAttribute("shadow");
     }
-  }
-
-  get background(): string {
-    return this._background;
-  }
-  set background(value: string) {
-    this._background = value;
-    this.setAttributeSafe("background", value);
-    this.render();
-  }
-
-  get border(): string {
-    return this._border;
-  }
-  set border(value: string) {
-    this._border = value;
-    this.setAttributeSafe("border", value);
-    this.render();
-  }
-
-  get width(): string {
-    return this._width;
-  }
-  set width(value: string) {
-    this._width = value;
-    this.setAttributeSafe("width", value);
-    this.render();
-  }
-
-  get height(): string {
-    return this._height;
-  }
-  set height(value: string) {
-    this._height = value;
-    this.setAttributeSafe("height", value);
-    this.render();
-  }
-
-  get overflow(): string {
-    return this._overflow;
-  }
-  set overflow(value: string) {
-    this._overflow = value;
-    this.setAttributeSafe("overflow", value);
-    this.render();
-  }
-
-  get display(): string {
-    return this._display;
-  }
-  set display(value: string) {
-    this._display = value;
-    this.setAttributeSafe("display", value);
-    this.render();
-  }
-
-  get flexDirection(): string {
-    return this._flexDirection;
-  }
-  set flexDirection(value: string) {
-    this._flexDirection = value;
-    this.setAttributeSafe("flex-direction", value);
-    this.render();
-  }
-
-  get justifyContent(): string {
-    return this._justifyContent;
-  }
-  set justifyContent(value: string) {
-    this._justifyContent = value;
-    this.setAttributeSafe("justify-content", value);
-    this.render();
-  }
-
-  get alignItems(): string {
-    return this._alignItems;
-  }
-  set alignItems(value: string) {
-    this._alignItems = value;
-    this.setAttributeSafe("align-items", value);
-    this.render();
-  }
-
-  get gap(): string {
-    return this._gap;
-  }
-  set gap(value: string) {
-    this._gap = value;
-    this.setAttributeSafe("gap", value);
     this.render();
   }
 
@@ -199,126 +86,69 @@ export class UiBox extends ShadowComponent {
   ): void {
     switch (name) {
       case "padding":
-        this._padding = (newValue as BoxSpacing) || "none";
-        break;
-      case "margin":
-        this._margin = (newValue as BoxSpacing) || "none";
+        this._padding = newValue as BoxSpacing | null;
         break;
       case "radius":
-        this._radius = (newValue as BoxRadius) || "none";
+        this._radius = newValue as BoxRadius | null;
         break;
       case "shadow":
-        this._shadow = (newValue as BoxShadow) || "none";
-        break;
-      case "background":
-        this._background = newValue || "";
-        break;
-      case "border":
-        this._border = newValue || "";
-        break;
-      case "width":
-        this._width = newValue || "";
-        break;
-      case "height":
-        this._height = newValue || "";
-        break;
-      case "overflow":
-        this._overflow = newValue || "";
-        break;
-      case "display":
-        this._display = newValue || "";
-        break;
-      case "flex-direction":
-        this._flexDirection = newValue || "";
-        break;
-      case "justify-content":
-        this._justifyContent = newValue || "";
-        break;
-      case "align-items":
-        this._alignItems = newValue || "";
-        break;
-      case "gap":
-        this._gap = newValue || "";
+        this._shadow = newValue as BoxShadow | null;
         break;
       case "clickable":
         this._clickable = newValue !== null;
         break;
     }
-    
-    // Re-render after attribute changes
-    if (this.isConnected) {
-      this.render();
-    }
   }
 
   protected renderShadowContent(): void {
-    const inlineStyles = this._buildInlineStyles();
+    const div = document.createElement("div");
+    div.classList.add("ui-box");
     
-    const html = templateHtml
-      .replace(/{padding}/g, this.padding)
-      .replace(/{margin}/g, this.margin)
-      .replace(/{radius}/g, this.radius)
-      .replace(/{shadow}/g, this.shadow)
-      .replace(/{clickable}/g, this.clickable ? "ui-box--clickable" : "")
-      .replace(/{style}/g, inlineStyles ? `style="${inlineStyles}"` : "")
-      .replace(/{tabindex}/g, this.clickable ? 'tabindex="0"' : "")
-      .replace(/{role}/g, this.clickable ? 'role="button"' : "");
-
-    this.setContent(html);
-    
-    // Setup event listeners after content is rendered
-    if (this.isConnected) {
-      this._setupEventListeners();
+    if (this._padding) {
+      div.setAttribute("data-padding", this._padding);
     }
+    
+    if (this._radius) {
+      div.setAttribute("data-radius", this._radius);
+    }
+    
+    if (this._shadow) {
+      div.setAttribute("data-shadow", this._shadow);
+    }
+    
+    if (this._clickable) {
+      div.setAttribute("data-clickable", "true");
+      div.setAttribute("tabindex", "0");
+      div.setAttribute("role", "button");
+    }
+
+    const slot = document.createElement("slot");
+    div.appendChild(slot);
+
+    this.setContent(div.outerHTML);
+    this._setupEventListeners();
   }
 
   protected getStyles(): string {
     return boxCss;
   }
 
-  private _buildInlineStyles(): string {
-    const styles: string[] = [];
-    
-    if (this.background) styles.push(`background: ${this.background}`);
-    if (this.border) styles.push(`border: ${this.border}`);
-    if (this.width) styles.push(`width: ${this.width}`);
-    if (this.height) styles.push(`height: ${this.height}`);
-    if (this.overflow) styles.push(`overflow: ${this.overflow}`);
-    if (this.display) styles.push(`display: ${this.display}`);
-    if (this.flexDirection) styles.push(`flex-direction: ${this.flexDirection}`);
-    if (this.justifyContent) styles.push(`justify-content: ${this.justifyContent}`);
-    if (this.alignItems) styles.push(`align-items: ${this.alignItems}`);
-    if (this.gap) styles.push(`gap: ${this.gap}`);
-    
-    return styles.join('; ');
-  }
-
   private _setupEventListeners(): void {
-    // Remove any existing event listeners
-    this.removeManagedEventListener("click");
-    this.removeManagedEventListener("keydown");
-    
-    if (this.clickable) {
+    if (this._clickable) {
       const boxElement = this.shadowQuerySelector(".ui-box");
       if (boxElement) {
         this.addManagedEventListener(boxElement, "click", this._handleClick);
-        this.addManagedEventListener(
-          boxElement,
-          "keydown",
-          this._handleKeydown as EventListener
-        );
+        this.addManagedEventListener(boxElement, "keydown", this._handleKeydown as EventListener);
       }
     }
   }
 
   private _handleClick(event: Event): void {
-    if (!this.clickable) return;
+    if (!this._clickable) return;
 
     this.dispatchEvent(
       new CustomEvent("ui-box-click", {
         detail: {
-          padding: this.padding,
-          margin: this.margin,
           originalEvent: event,
         },
         bubbles: true,
@@ -328,7 +158,7 @@ export class UiBox extends ShadowComponent {
   }
 
   private _handleKeydown(event: KeyboardEvent): void {
-    if (!this.clickable) return;
+    if (!this._clickable) return;
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       this._handleClick(event);
@@ -336,78 +166,16 @@ export class UiBox extends ShadowComponent {
   }
 
   focus(): void {
-    if (this.clickable) {
+    if (this._clickable) {
       this.focusFirstElementInShadow();
     }
   }
 
   click(): void {
-    if (this.clickable) {
+    if (this._clickable) {
       this._handleClick(new Event("click"));
     }
   }
 }
 
 customElements.define("ui-box", UiBox);
-
-export function renderUiBoxSSR({
-  padding = "none",
-  margin = "none",
-  radius = "none",
-  shadow = "none",
-  background = "",
-  border = "",
-  width = "",
-  height = "",
-  overflow = "",
-  display = "",
-  flexDirection = "",
-  justifyContent = "",
-  alignItems = "",
-  gap = "",
-  clickable = false,
-}: {
-  padding?: BoxSpacing;
-  margin?: BoxSpacing;
-  radius?: BoxRadius;
-  shadow?: BoxShadow;
-  background?: string;
-  border?: string;
-  width?: string;
-  height?: string;
-  overflow?: string;
-  display?: string;
-  flexDirection?: string;
-  justifyContent?: string;
-  alignItems?: string;
-  gap?: string;
-  clickable?: boolean;
-} = {}): string {
-  const inlineStyles: string[] = [];
-  
-  if (background) inlineStyles.push(`background: ${background}`);
-  if (border) inlineStyles.push(`border: ${border}`);
-  if (width) inlineStyles.push(`width: ${width}`);
-  if (height) inlineStyles.push(`height: ${height}`);
-  if (overflow) inlineStyles.push(`overflow: ${overflow}`);
-  if (display) inlineStyles.push(`display: ${display}`);
-  if (flexDirection) inlineStyles.push(`flex-direction: ${flexDirection}`);
-  if (justifyContent) inlineStyles.push(`justify-content: ${justifyContent}`);
-  if (alignItems) inlineStyles.push(`align-items: ${alignItems}`);
-  if (gap) inlineStyles.push(`gap: ${gap}`);
-  
-  const styleAttribute = inlineStyles.length > 0 ? `style="${inlineStyles.join('; ')}"` : "";
-  
-  return `
-    <style>${boxCss}</style>
-    ${templateHtml
-      .replace(/{padding}/g, padding)
-      .replace(/{margin}/g, margin)
-      .replace(/{radius}/g, radius)
-      .replace(/{shadow}/g, shadow)
-      .replace(/{clickable}/g, clickable ? "ui-box--clickable" : "")
-      .replace(/{style}/g, styleAttribute)
-      .replace(/{tabindex}/g, clickable ? 'tabindex="0"' : "")
-      .replace(/{role}/g, clickable ? 'role="button"' : "")}
-  `;
-}
