@@ -40,6 +40,38 @@
   min-height: var(--ui-select-height-large, 52px);
 }
 
+/* Size variants for dropdown options */
+.ui-select[data-size="small"] .ui-select__option {
+  --ui-select-option-font-size: var(--ui-select-font-size-small, 14px);
+  padding: 6px 10px;
+}
+
+.ui-select[data-size="medium"] .ui-select__option {
+  --ui-select-option-font-size: var(--ui-select-font-size-medium, 16px);
+  padding: 8px 12px;
+}
+
+.ui-select[data-size="large"] .ui-select__option {
+  --ui-select-option-font-size: var(--ui-select-font-size-large, 18px);
+  padding: 10px 14px;
+}
+
+/* Size variants for search input */
+.ui-select[data-size="small"] .ui-select__search-input {
+  --ui-select-search-font-size: var(--ui-select-font-size-small, 14px);
+  padding: 4px 6px;
+}
+
+.ui-select[data-size="medium"] .ui-select__search-input {
+  --ui-select-search-font-size: var(--ui-select-font-size-medium, 16px);
+  padding: 6px 8px;
+}
+
+.ui-select[data-size="large"] .ui-select__search-input {
+  --ui-select-search-font-size: var(--ui-select-font-size-large, 18px);
+  padding: 8px 10px;
+}
+
 /* Display area */
 .ui-select__display {
   flex: 1;
@@ -126,7 +158,7 @@
   padding: 6px 8px;
   border: 1px solid var(--ui-select-search-input-border, #d1d5db);
   border-radius: 4px;
-  font-size: 14px;
+  font-size: var(--ui-select-search-font-size, 14px);
   outline: none;
   box-sizing: border-box;
 }
@@ -145,7 +177,7 @@
   padding: 8px 12px;
   cursor: pointer;
   color: var(--ui-select-option-color, #111827);
-  font-size: 14px;
+  font-size: var(--ui-select-option-font-size, 14px);
   user-select: none;
   outline: none;
 }

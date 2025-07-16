@@ -94,7 +94,7 @@ export class UiSelect extends ShadowComponent {
     Object.defineProperty(this, propertyName, {
       get: () => this._properties.get(propertyName),
       set: (value: any) => {
-        const processedValue = this._processPropertyValue(value, config);
+        const processedValue = this._processPropertyValue(value, config, propertyName);
         if (this._properties.get(propertyName) !== processedValue) {
           this._properties.set(propertyName, processedValue);
           this.setAttributeSafe(attrName, processedValue);
@@ -108,11 +108,15 @@ export class UiSelect extends ShadowComponent {
     });
   }
 
-  private _processPropertyValue(value: any, config: PropertyConfig): any {
+  private _processPropertyValue(value: any, config: PropertyConfig, propertyName?: string): any {
     switch (config.type) {
       case 'boolean':
         return Boolean(value);
       case 'string':
+        // Add size validation for size property
+        if (propertyName === 'size') {
+          return ['small', 'medium', 'large'].includes(value) ? value : config.defaultValue;
+        }
         return String(value || config.defaultValue);
       case 'nullable-string':
         return value || null;
@@ -120,6 +124,27 @@ export class UiSelect extends ShadowComponent {
         return Array.isArray(value) ? value : [];
       default:
         return value;
+    }
+  }
+
+  private _setPropertyValue(propertyName: string, value: any): void {
+    const config = this._propertyConfigs[propertyName];
+    if (!config) return;
+    
+    const processedValue = this._processPropertyValue(value, config, propertyName);
+    if (this._properties.get(propertyName) !== processedValue) {
+      this._properties.set(propertyName, processedValue);
+      
+      // Map property names to attribute names
+      const attrName = propertyName === 'ariaLabel' ? 'aria-label' : 
+                       propertyName === 'ariaDescribedby' ? 'aria-describedby' : 
+                       propertyName.toLowerCase();
+      
+      this.setAttributeSafe(attrName, processedValue);
+      
+      if (config.updateDisplay) {
+        this._updateDisplay();
+      }
     }
   }
 
@@ -148,45 +173,62 @@ export class UiSelect extends ShadowComponent {
     super.disconnectedCallback();
     document.removeEventListener('click', this._handleOutsideClick);
     document.removeEventListener('keydown', this._handleEscapeKey);
+    
+    // Clean up type-ahead timer to prevent memory leaks
+    if (this._typeAheadTimer) {
+      clearTimeout(this._typeAheadTimer);
+      this._typeAheadTimer = null;
+    }
   }
 
-  // Type-safe property accessors
+  // Type-safe property accessors that delegate to dynamic property system
   get value(): string { return this._properties.get('value'); }
-  set value(value: string) { (this as any).value = value; }
+  set value(value: string) { this._setPropertyValue('value', value); }
 
   get placeholder(): string { return this._properties.get('placeholder'); }
-  set placeholder(value: string) { (this as any).placeholder = value; }
+  set placeholder(value: string) { this._setPropertyValue('placeholder', value); }
 
   get multiple(): boolean { return this._properties.get('multiple'); }
-  set multiple(value: boolean) { (this as any).multiple = value; }
+  set multiple(value: boolean) { this._setPropertyValue('multiple', value); }
 
   get searchable(): boolean { return this._properties.get('searchable'); }
-  set searchable(value: boolean) { (this as any).searchable = value; }
+  set searchable(value: boolean) { this._setPropertyValue('searchable', value); }
 
   get disabled(): boolean { return this._properties.get('disabled'); }
-  set disabled(value: boolean) { (this as any).disabled = value; }
+  set disabled(value: boolean) { this._setPropertyValue('disabled', value); }
 
   get required(): boolean { return this._properties.get('required'); }
-  set required(value: boolean) { (this as any).required = value; }
+  set required(value: boolean) { this._setPropertyValue('required', value); }
 
   get invalid(): boolean { return this._properties.get('invalid'); }
-  set invalid(value: boolean) { (this as any).invalid = value; }
+  set invalid(value: boolean) { this._setPropertyValue('invalid', value); }
 
   get size(): SelectSize { return this._properties.get('size'); }
-  set size(value: SelectSize) { (this as any).size = value; }
+  set size(value: SelectSize) { this._setPropertyValue('size', value); }
 
   get ariaLabel(): string | null { return this._properties.get('ariaLabel'); }
-  set ariaLabel(value: string | null) { (this as any).ariaLabel = value; }
+  set ariaLabel(value: string | null) { this._setPropertyValue('ariaLabel', value); }
 
   get ariaDescribedby(): string | null { return this._properties.get('ariaDescribedby'); }
-  set ariaDescribedby(value: string | null) { (this as any).ariaDescribedby = value; }
+  set ariaDescribedby(value: string | null) { this._setPropertyValue('ariaDescribedby', value); }
 
   get options(): UiSelectOption[] {
     return this._options;
   }
 
   set options(value: UiSelectOption[]) {
-    this._options = Array.isArray(value) ? value : [];
+    // Validate option objects structure
+    const validOptions = Array.isArray(value) ? 
+      value.filter(opt => 
+        opt && 
+        typeof opt === 'object' &&
+        typeof opt.value === 'string' && 
+        typeof opt.label === 'string' &&
+        opt.value.length > 0 &&
+        opt.label.length > 0
+      ) : [];
+    
+    this._options = validOptions;
     this._filteredOptions = [...this._options];
     this._updateDisplay();
   }
@@ -202,7 +244,7 @@ export class UiSelect extends ShadowComponent {
     
     const config = this._propertyConfigs[propertyName];
     if (config) {
-      const processedValue = this._processAttributeValue(newValue, config);
+      const processedValue = this._processAttributeValue(newValue, config, propertyName);
       this._properties.set(propertyName, processedValue);
       if (config.updateDisplay) {
         this._updateDisplay();
@@ -210,11 +252,15 @@ export class UiSelect extends ShadowComponent {
     }
   }
 
-  private _processAttributeValue(value: string | null, config: PropertyConfig): any {
+  private _processAttributeValue(value: string | null, config: PropertyConfig, propertyName?: string): any {
     switch (config.type) {
       case 'boolean':
         return value !== null;
       case 'string':
+        // Add size validation for size property
+        if (propertyName === 'size') {
+          return value && ['small', 'medium', 'large'].includes(value) ? value : config.defaultValue;
+        }
         return value || config.defaultValue;
       case 'nullable-string':
         return value;
@@ -356,7 +402,7 @@ export class UiSelect extends ShadowComponent {
     if (this.disabled) return;
     
     event.preventDefault();
-    this._toggleDropdown();
+    this._toggleDropdown(event);
   }
 
   private _handleTriggerKeydown(event: Event): void {
@@ -368,7 +414,7 @@ export class UiSelect extends ShadowComponent {
       case 'ArrowUp':
         keyEvent.preventDefault();
         if (!this._isOpen) {
-          this._openDropdown();
+          this._openDropdown(keyEvent);
         } else {
           this._navigateOptions(keyEvent.key === 'ArrowDown' ? 1 : -1);
         }
@@ -378,13 +424,13 @@ export class UiSelect extends ShadowComponent {
       case ' ':
         keyEvent.preventDefault();
         if (!this._isOpen) {
-          this._openDropdown();
+          this._openDropdown(keyEvent);
         } else if (this._highlightedIndex >= 0) {
           const option = this._filteredOptions[this._highlightedIndex];
           if (option && !option.disabled) {
-            this._selectOption(option.value);
+            this._selectOption(option.value, keyEvent);
             if (!this.multiple) {
-              this._closeDropdown();
+              this._closeDropdown(keyEvent);
             }
           }
         }
@@ -393,13 +439,13 @@ export class UiSelect extends ShadowComponent {
       case 'Escape':
         if (this._isOpen) {
           keyEvent.preventDefault();
-          this._closeDropdown();
+          this._closeDropdown(keyEvent);
         }
         break;
       
       case 'Tab':
         if (this._isOpen) {
-          this._closeDropdown();
+          this._closeDropdown(keyEvent);
         }
         break;
       
@@ -420,10 +466,10 @@ export class UiSelect extends ShadowComponent {
       return;
     }
     
-    this._selectOption(optionValue);
+    this._selectOption(optionValue, event);
     
     if (!this.multiple) {
-      this._closeDropdown();
+      this._closeDropdown(event);
     }
   }
 
@@ -436,10 +482,10 @@ export class UiSelect extends ShadowComponent {
       const optionValue = target.getAttribute('data-value');
       
       if (optionValue && !target.classList.contains('ui-select__option--disabled')) {
-        this._selectOption(optionValue);
+        this._selectOption(optionValue, keyEvent);
         
         if (!this.multiple) {
-          this._closeDropdown();
+          this._closeDropdown(keyEvent);
         }
       }
     }
@@ -454,25 +500,25 @@ export class UiSelect extends ShadowComponent {
 
   private _handleOutsideClick(event: Event): void {
     if (this._isOpen && !this.contains(event.target as Node)) {
-      this._closeDropdown();
+      this._closeDropdown(event);
     }
   }
 
   private _handleEscapeKey(event: KeyboardEvent): void {
     if (event.key === 'Escape' && this._isOpen) {
-      this._closeDropdown();
+      this._closeDropdown(event);
     }
   }
 
-  private _toggleDropdown(): void {
+  private _toggleDropdown(originalEvent?: Event): void {
     if (this._isOpen) {
-      this._closeDropdown();
+      this._closeDropdown(originalEvent);
     } else {
-      this._openDropdown();
+      this._openDropdown(originalEvent);
     }
   }
 
-  private _openDropdown(): void {
+  private _openDropdown(originalEvent?: Event): void {
     this._isOpen = true;
     this._renderDropdownContent();
     
@@ -485,12 +531,12 @@ export class UiSelect extends ShadowComponent {
     }
     
     this.dispatchEvent(new CustomEvent('ui-select-open', {
-      detail: { originalEvent: event },
+      detail: { originalEvent: originalEvent || new Event('open') },
       bubbles: true
     }));
   }
 
-  private _closeDropdown(): void {
+  private _closeDropdown(originalEvent?: Event): void {
     this._isOpen = false;
     this._highlightedIndex = -1;
     this._searchQuery = '';
@@ -506,12 +552,12 @@ export class UiSelect extends ShadowComponent {
     }
     
     this.dispatchEvent(new CustomEvent('ui-select-close', {
-      detail: { originalEvent: event },
+      detail: { originalEvent: originalEvent || new Event('close') },
       bubbles: true
     }));
   }
 
-  private _selectOption(optionValue: string): void {
+  private _selectOption(optionValue: string, originalEvent?: Event): void {
     const option = this._options.find(opt => opt.value === optionValue);
     if (!option) return;
     
@@ -551,7 +597,7 @@ export class UiSelect extends ShadowComponent {
       detail: {
         value: newValue,
         selectedOptions: selectedOptions,
-        originalEvent: event as Event
+        originalEvent: originalEvent || new Event('change')
       },
       bubbles: true
     }));

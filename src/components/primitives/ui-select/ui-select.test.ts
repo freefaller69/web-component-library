@@ -70,6 +70,25 @@ describe('ui-select', () => {
       const display = element.shadowRoot?.querySelector('.ui-select__display');
       expect(display?.textContent).toBe('Option 1');
     });
+
+    it('should filter out invalid options', () => {
+      const mixedOptions = [
+        { value: 'valid1', label: 'Valid Option 1' },  // Valid
+        { value: '', label: 'Invalid' },                // Invalid: empty value
+        { value: 'valid2', label: '' },                 // Invalid: empty label
+        null,                                           // Invalid: null
+        { value: 'valid3' },                           // Invalid: missing label
+        { label: 'Missing Value' },                    // Invalid: missing value
+        { value: 'valid4', label: 'Valid Option 4' }   // Valid
+      ] as any;
+      
+      element.options = mixedOptions;
+      
+      // Should only keep the 2 valid options
+      expect(element.options).toHaveLength(2);
+      expect(element.options[0]).toEqual({ value: 'valid1', label: 'Valid Option 1' });
+      expect(element.options[1]).toEqual({ value: 'valid4', label: 'Valid Option 4' });
+    });
   });
 
   describe('Single selection', () => {
@@ -243,6 +262,26 @@ describe('ui-select', () => {
       element.disabled = true;
       const trigger = element.shadowRoot?.querySelector('.ui-select__trigger');
       expect(trigger?.getAttribute('tabindex')).toBe('-1');
+    });
+
+    it('should validate size values', () => {
+      // Valid sizes
+      element.size = 'small';
+      expect(element.size).toBe('small');
+      
+      element.size = 'medium';
+      expect(element.size).toBe('medium');
+      
+      element.size = 'large';
+      expect(element.size).toBe('large');
+      
+      // Invalid size should fallback to default
+      (element as any).size = 'invalid-size';
+      expect(element.size).toBe('medium'); // default value
+      
+      // Setting via attribute should also validate
+      element.setAttribute('size', 'tiny');
+      expect(element.size).toBe('medium'); // should fallback to default
     });
   });
 
