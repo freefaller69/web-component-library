@@ -27,7 +27,7 @@ export class UiButton extends ShadowComponent {
   private _loading = false;
 
   constructor() {
-    super();
+    super({ mode: "open" }, false);
     this._handleClick = this._handleClick.bind(this);
     this._handleKeydown = this._handleKeydown.bind(this);
   }

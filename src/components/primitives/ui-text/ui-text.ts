@@ -12,6 +12,10 @@ export class UiText extends ShadowComponent {
   private _as: TextAs = "p";
   private _size: TextSize | null = null;
 
+  constructor() {
+    super({ mode: "open" }, false);
+  }
+
   get as(): TextAs {
     return this._as;
   }
