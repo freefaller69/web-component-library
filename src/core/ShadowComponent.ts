@@ -2,15 +2,17 @@ import { BaseComponent } from "./BaseComponent.js";
 
 /**
  * ShadowComponent - Extends BaseComponent with Shadow DOM support
- * Adds shadow root setup with CSS injection and content container
+ * Adds shadow root setup with CSS injection and optional content container
  */
 export abstract class ShadowComponent extends BaseComponent {
   declare readonly shadowRoot: ShadowRoot;
-  private contentRoot: HTMLElement;
+  private contentRoot?: HTMLElement;
   private styleElement?: HTMLStyleElement;
+  private useContentWrapper: boolean;
 
-  constructor(shadowRootOptions: ShadowRootInit = { mode: "open" }) {
+  constructor(shadowRootOptions: ShadowRootInit = { mode: "open" }, useContentWrapper = true) {
     super();
+    this.useContentWrapper = useContentWrapper;
     this.attachShadow(shadowRootOptions);
 
     // Setup styles
@@ -25,9 +27,11 @@ export abstract class ShadowComponent extends BaseComponent {
       this.shadowRoot.appendChild(this.styleElement);
     }
 
-    // Setup content container
-    this.contentRoot = document.createElement("div");
-    this.shadowRoot.appendChild(this.contentRoot);
+    // Setup content container (optional)
+    if (this.useContentWrapper) {
+      this.contentRoot = document.createElement("div");
+      this.shadowRoot.appendChild(this.contentRoot);
+    }
   }
 
   /**
@@ -48,11 +52,26 @@ export abstract class ShadowComponent extends BaseComponent {
   }
 
   /**
-   * Sets the inner HTML inside the content container.
+   * Sets the inner HTML inside the content container or directly in shadow root.
    * Keeps styles intact.
    */
   protected setContent(html: string): void {
-    this.contentRoot.innerHTML = html;
+    if (this.useContentWrapper && this.contentRoot) {
+      this.contentRoot.innerHTML = html;
+    } else {
+      // Find and preserve style element, then set content directly in shadow root
+      const styleEl = this.shadowRoot.querySelector('style');
+      this.shadowRoot.innerHTML = '';
+      if (styleEl) {
+        this.shadowRoot.appendChild(styleEl);
+      }
+      // Create a temporary div to parse HTML and append children
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html;
+      while (tempDiv.firstChild) {
+        this.shadowRoot.appendChild(tempDiv.firstChild);
+      }
+    }
   }
 
   /**
@@ -68,12 +87,18 @@ export abstract class ShadowComponent extends BaseComponent {
   protected shadowQuerySelector<T extends Element = Element>(
     selector: string
   ): T | null {
+    if (this.useContentWrapper && this.contentRoot) {
+      return this.contentRoot.querySelector<T>(selector);
+    }
     return this.shadowRoot.querySelector<T>(selector);
   }
 
   protected shadowQuerySelectorAll<T extends Element = Element>(
     selector: string
   ): NodeListOf<T> {
+    if (this.useContentWrapper && this.contentRoot) {
+      return this.contentRoot.querySelectorAll<T>(selector);
+    }
     return this.shadowRoot.querySelectorAll<T>(selector);
   }
 }
