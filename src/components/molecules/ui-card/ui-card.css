@@ -1,0 +1,331 @@
+.ui-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--ui-card-background, #ffffff);
+  border-radius: var(--ui-card-border-radius, 12px);
+  overflow: hidden;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  box-sizing: border-box;
+  position: relative;
+  padding: var(--ui-card-padding);
+  gap: var(--ui-card-gap);
+}
+
+/* Bordered state (default) */
+.ui-card:not(.ui-card--borderless) {
+  border: 1px solid var(--ui-card-border, #e5e7eb);
+}
+
+/* Elevated state */
+.ui-card--elevated {
+  box-shadow: var(--ui-card-shadow-elevated, 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+    0 2px 4px -1px rgba(0, 0, 0, 0.06)
+  );
+}
+
+/* Clickable state */
+.ui-card--clickable {
+  cursor: pointer;
+  outline: none;
+}
+
+.ui-card--clickable:hover {
+  box-shadow: var(--ui-card-shadow-hover, 
+    0 10px 15px -3px rgba(0, 0, 0, 0.1), 
+    0 4px 6px -2px rgba(0, 0, 0, 0.05)
+  );
+  transform: var(--ui-card-transform-hover, translateY(-2px));
+}
+
+.ui-card--clickable:focus {
+  box-shadow: var(--ui-card-shadow-focus, 
+    0 0 0 3px rgba(59, 130, 246, 0.1), 
+    0 10px 15px -3px rgba(0, 0, 0, 0.1), 
+    0 4px 6px -2px rgba(0, 0, 0, 0.05)
+  );
+  transform: var(--ui-card-transform-hover, translateY(-2px));
+}
+
+.ui-card--clickable:active {
+  transform: var(--ui-card-transform-active, translateY(0));
+}
+
+/* Size variants using custom properties */
+.ui-card[data-size="small"] {
+  --ui-card-padding: var(--ui-card-padding-small, 16px);
+  --ui-card-gap: var(--ui-card-gap-small, 12px);
+}
+
+.ui-card[data-size="medium"] {
+  --ui-card-padding: var(--ui-card-padding-medium, 20px);
+  --ui-card-gap: var(--ui-card-gap-medium, 16px);
+}
+
+.ui-card[data-size="large"] {
+  --ui-card-padding: var(--ui-card-padding-large, 24px);
+  --ui-card-gap: var(--ui-card-gap-large, 20px);
+}
+
+/* Variant: Default */
+.ui-card[data-variant="default"] {
+  gap: inherit;
+}
+
+.ui-card[data-variant="default"] .ui-card__media {
+  order: 1;
+  margin: calc(var(--ui-card-padding) * -1) calc(var(--ui-card-padding) * -1) 0;
+  overflow: hidden;
+}
+
+.ui-card[data-variant="default"] .ui-card__title {
+  order: 2;
+  font-size: var(--ui-card-title-font-size, 18px);
+  font-weight: var(--ui-card-title-font-weight, 600);
+  color: var(--ui-card-title-color, #111827);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.ui-card[data-variant="default"] slot:not([name]) {
+  order: 3;
+  flex: 1;
+  color: var(--ui-card-content-color, #6b7280);
+  line-height: 1.6;
+}
+
+.ui-card[data-variant="default"] .ui-card__actions {
+  order: 4;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: auto;
+}
+
+/* Variant: Minimal */
+.ui-card[data-variant="minimal"] {
+  padding: var(--ui-card-minimal-padding, 16px);
+  gap: var(--ui-card-minimal-gap, 12px);
+  border: none;
+  box-shadow: none;
+  background-color: transparent;
+}
+
+.ui-card[data-variant="minimal"]:not(.ui-card--borderless) {
+  border: 1px solid var(--ui-card-minimal-border, transparent);
+}
+
+.ui-card[data-variant="minimal"].ui-card--clickable:hover {
+  background-color: var(--ui-card-minimal-background-hover, #f9fafb);
+  transform: none;
+  box-shadow: none;
+}
+
+/* Variant: Stat */
+.ui-card[data-variant="stat"] {
+  text-align: center;
+  gap: var(--ui-card-stat-gap, 8px);
+  min-height: var(--ui-card-stat-min-height, 120px);
+  justify-content: center;
+}
+
+.ui-card[data-variant="stat"] .ui-card__icon {
+  order: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: var(--ui-card-stat-icon-size, 24px);
+  color: var(--ui-card-stat-icon-color, #3b82f6);
+}
+
+.ui-card[data-variant="stat"] .ui-card__title {
+  order: 2;
+  font-size: var(--ui-card-stat-title-font-size, 14px);
+  font-weight: var(--ui-card-stat-title-font-weight, 500);
+  color: var(--ui-card-stat-title-color, #6b7280);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.ui-card[data-variant="stat"] .ui-card__value {
+  order: 3;
+  font-size: var(--ui-card-stat-value-font-size, 32px);
+  font-weight: var(--ui-card-stat-value-font-weight, 700);
+  color: var(--ui-card-stat-value-color, #111827);
+  margin: 0;
+  line-height: 1;
+}
+
+.ui-card[data-variant="stat"] .ui-card__subtitle {
+  order: 4;
+  font-size: var(--ui-card-stat-subtitle-font-size, 12px);
+  color: var(--ui-card-stat-subtitle-color, #9ca3af);
+  margin: 0;
+}
+
+/* Variant: List */
+.ui-card[data-variant="list"] {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--ui-card-list-gap, 16px);
+  padding: var(--ui-card-list-padding, 16px);
+}
+
+.ui-card[data-variant="list"] .ui-card__media {
+  order: 1;
+  flex-shrink: 0;
+  width: var(--ui-card-list-media-width, 48px);
+  height: var(--ui-card-list-media-height, 48px);
+  border-radius: var(--ui-card-list-media-border-radius, 8px);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--ui-card-list-media-background, #f3f4f6);
+}
+
+.ui-card[data-variant="list"] .ui-card__title {
+  order: 2;
+  font-size: var(--ui-card-list-title-font-size, 16px);
+  font-weight: var(--ui-card-list-title-font-weight, 600);
+  color: var(--ui-card-list-title-color, #111827);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.ui-card[data-variant="list"] .ui-card__subtitle {
+  order: 3;
+  font-size: var(--ui-card-list-subtitle-font-size, 14px);
+  color: var(--ui-card-list-subtitle-color, #6b7280);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.ui-card[data-variant="list"] .ui-card__meta {
+  order: 4;
+  font-size: var(--ui-card-list-meta-font-size, 12px);
+  color: var(--ui-card-list-meta-color, #9ca3af);
+  margin: 0;
+  margin-left: auto;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.ui-card[data-variant="list"] .ui-card__actions {
+  order: 5;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Common slot content styling */
+.ui-card ::slotted(img) {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.ui-card ::slotted(h1),
+.ui-card ::slotted(h2),
+.ui-card ::slotted(h3),
+.ui-card ::slotted(h4),
+.ui-card ::slotted(h5),
+.ui-card ::slotted(h6) {
+  margin: 0;
+  color: inherit;
+}
+
+.ui-card ::slotted(p) {
+  margin: 0;
+  color: inherit;
+}
+
+.ui-card ::slotted(button) {
+  margin: 0;
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .ui-card[data-variant="list"] {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+  
+  .ui-card[data-variant="list"] .ui-card__meta {
+    margin-left: 0;
+    text-align: left;
+  }
+  
+  .ui-card[data-variant="list"] .ui-card__actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .ui-card:not(.ui-card--borderless) {
+    border-width: 2px;
+  }
+  
+  .ui-card--clickable:focus {
+    outline: 3px solid;
+    outline-offset: 2px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .ui-card,
+  .ui-card--clickable:hover,
+  .ui-card--clickable:focus,
+  .ui-card--clickable:active {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+  .ui-card {
+    --ui-card-background: #1f2937;
+    --ui-card-border: #374151;
+    --ui-card-title-color: #f9fafb;
+    --ui-card-content-color: #d1d5db;
+    --ui-card-stat-title-color: #9ca3af;
+    --ui-card-stat-value-color: #f9fafb;
+    --ui-card-stat-subtitle-color: #6b7280;
+    --ui-card-list-title-color: #f9fafb;
+    --ui-card-list-subtitle-color: #d1d5db;
+    --ui-card-list-meta-color: #9ca3af;
+    --ui-card-list-media-background: #374151;
+  }
+  
+  .ui-card[data-variant="minimal"].ui-card--clickable:hover {
+    --ui-card-minimal-background-hover: #374151;
+  }
+  
+  .ui-card--elevated {
+    --ui-card-shadow-elevated: 
+      0 4px 6px -1px rgba(0, 0, 0, 0.3), 
+      0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  }
+  
+  .ui-card--clickable:hover {
+    --ui-card-shadow-hover: 
+      0 10px 15px -3px rgba(0, 0, 0, 0.3), 
+      0 4px 6px -2px rgba(0, 0, 0, 0.2);
+  }
+  
+  .ui-card--clickable:focus {
+    --ui-card-shadow-focus: 
+      0 0 0 3px rgba(147, 197, 253, 0.2), 
+      0 10px 15px -3px rgba(0, 0, 0, 0.3), 
+      0 4px 6px -2px rgba(0, 0, 0, 0.2);
+  }
+}
