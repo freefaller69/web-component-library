@@ -1,0 +1,75 @@
+.ui-select {
+  position: relative;
+  width: 100%;
+}
+
+.ui-select__trigger {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  font: inherit;
+}
+
+.ui-select__trigger:hover {
+  border-color: #999;
+}
+
+.ui-select__trigger:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+.ui-select--disabled .ui-select__trigger {
+  background: #f5f5f5;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.ui-select__display--placeholder {
+  color: #999;
+}
+
+.ui-select__arrow {
+  transition: transform 0.2s;
+  user-select: none;
+}
+
+.ui-select__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.ui-select__option {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.ui-select__option:hover,
+.ui-select__option--highlighted {
+  background: #f0f8ff;
+}
+
+.ui-select__option--selected {
+  background: #007bff;
+  color: white;
+}
+
+.ui-select__option--disabled {
+  color: #999;
+  cursor: not-allowed;
+}
