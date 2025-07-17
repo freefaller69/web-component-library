@@ -1,0 +1,59 @@
+/* ui-card component styles */
+
+:host {
+  display: block;
+  
+  /* CSS Custom Properties for theming */
+  --ui-card-bg: #ffffff;
+  --ui-card-border: 1px solid hsl(220, 13%, 91%);
+  --ui-card-border-radius: 0.5rem;
+  --ui-card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  --ui-card-padding-none: 0;
+  --ui-card-padding-sm: 0.75rem;
+  --ui-card-padding-md: 1rem;
+  --ui-card-padding-lg: 1.5rem;
+}
+
+.ui-card {
+  background: var(--ui-card-bg);
+  border: var(--ui-card-border);
+  border-radius: var(--ui-card-border-radius);
+  box-shadow: var(--ui-card-shadow);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Padding variants */
+.ui-card--none { padding: var(--ui-card-padding-none); }
+.ui-card--sm { padding: var(--ui-card-padding-sm); }
+.ui-card--md { padding: var(--ui-card-padding-md); }
+.ui-card--lg { padding: var(--ui-card-padding-lg); }
+
+/* Clickable state */
+.ui-card--clickable {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ui-card--clickable:hover {
+  box-shadow: 0 4px 12px 0 rgb(0 0 0 / 0.15);
+  transform: translateY(-1px);
+}
+
+.ui-card--clickable:focus {
+  outline: 2px solid hsl(200, 100%, 50%);
+  outline-offset: 2px;
+}
+
+/* Slot containers */
+.ui-card__header:empty,
+.ui-card__footer:empty {
+  display: none;
+}
+
+.ui-card__content {
+  flex: 1;
+}
+
+/* Dark mode support via CSS custom properties that can be overridden from outside */
