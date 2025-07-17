@@ -24,23 +24,68 @@ export class UiSelect extends ShadowComponent {
     this._handleOutsideClick = this._handleOutsideClick.bind(this);
   }
 
-  get value(): string { return this._value; }
-  set value(val: string) { this._value = val; this.setAttributeSafe("value", val); this._updateDisplay(); }
-  get placeholder(): string { return this._placeholder; }
-  set placeholder(val: string) { this._placeholder = val; this.setAttributeSafe("placeholder", val); this._updateDisplay(); }
-  get disabled(): boolean { return this._disabled; }
-  set disabled(val: boolean) { this._disabled = val; this.setAttributeSafe("disabled", val ? "" : null); this.render(); }
-  get options(): UiSelectOption[] { return this._options; }
-  set options(opts: UiSelectOption[]) { this._options = Array.isArray(opts) ? opts : []; this._renderOptions(); }
+  get value(): string { 
+    return this._value; 
+  }
+  
+  set value(val: string) { 
+    this._value = val; 
+    this.setAttributeSafe("value", val); 
+    this._updateDisplay(); 
+  }
+  
+  get placeholder(): string { 
+    return this._placeholder; 
+  }
+  
+  set placeholder(val: string) { 
+    this._placeholder = val; 
+    this.setAttributeSafe("placeholder", val); 
+    this._updateDisplay(); 
+  }
+  
+  get disabled(): boolean { 
+    return this._disabled; 
+  }
+  
+  set disabled(val: boolean) { 
+    this._disabled = val; 
+    this.setAttributeSafe("disabled", val ? "" : null); 
+    this.render(); 
+  }
+  
+  get options(): UiSelectOption[] { 
+    return this._options; 
+  }
+  
+  set options(opts: UiSelectOption[]) { 
+    this._options = Array.isArray(opts) ? opts : []; 
+    this._renderOptions(); 
+  }
 
-  connectedCallback(): void { super.connectedCallback(); document.addEventListener('click', this._handleOutsideClick); }
-  disconnectedCallback(): void { super.disconnectedCallback(); document.removeEventListener('click', this._handleOutsideClick); }
+  connectedCallback(): void { 
+    super.connectedCallback(); 
+    document.addEventListener('click', this._handleOutsideClick); 
+  }
+  
+  disconnectedCallback(): void { 
+    super.disconnectedCallback(); 
+    document.removeEventListener('click', this._handleOutsideClick); 
+  }
 
   protected onAttributeChange(name: string, _old: string | null, newValue: string | null): void {
     switch (name) {
-      case "value": this._value = newValue || ""; this._updateDisplay(); break;
-      case "placeholder": this._placeholder = newValue || "Select an option"; this._updateDisplay(); break;
-      case "disabled": this._disabled = newValue !== null; break;
+      case "value": 
+        this._value = newValue || ""; 
+        this._updateDisplay(); 
+        break;
+      case "placeholder": 
+        this._placeholder = newValue || "Select an option"; 
+        this._updateDisplay(); 
+        break;
+      case "disabled": 
+        this._disabled = newValue !== null; 
+        break;
     }
   }
 
@@ -51,7 +96,8 @@ export class UiSelect extends ShadowComponent {
       this.addManagedEventListener(trigger, 'click', () => this._toggle());
       this.addManagedEventListener(trigger, 'keydown', (e) => this._handleKeydown(e as KeyboardEvent));
     }
-    this._updateDisplay(); this._renderOptions();
+    this._updateDisplay(); 
+    this._renderOptions();
   }
 
   protected _updateDisplay(): void {
@@ -71,8 +117,11 @@ export class UiSelect extends ShadowComponent {
       el.className = 'ui-select__option';
       el.setAttribute('data-value', option.value);
       el.textContent = option.label;
-      if (option.disabled) el.classList.add('ui-select__option--disabled');
-      else this.addManagedEventListener(el, 'click', () => this._select(option.value));
+      if (option.disabled) {
+        el.classList.add('ui-select__option--disabled');
+      } else {
+        this.addManagedEventListener(el, 'click', () => this._select(option.value));
+      }
       if (this._isOptionSelected(option.value)) el.classList.add('ui-select__option--selected');
       dropdown.appendChild(el);
     });
@@ -85,28 +134,42 @@ export class UiSelect extends ShadowComponent {
       case 'ArrowDown':
       case 'ArrowUp':
         e.preventDefault();
-        if (!this._isOpen) this._open();
-        else this._navigate(e.key === 'ArrowDown' ? 1 : -1);
+        if (!this._isOpen) {
+          this._open();
+        } else {
+          this._navigate(e.key === 'ArrowDown' ? 1 : -1);
+        }
         break;
       case 'Enter':
       case ' ':
         e.preventDefault();
         if (this._isOpen && this._highlightedIndex >= 0) {
           this._selectByIndex(this._highlightedIndex);
-          if (this._shouldCloseOnSelection()) this._close();
-        } else this._toggle();
+          if (this._shouldCloseOnSelection()) {
+            this._close();
+          }
+        } else {
+          this._toggle();
+        }
         break;
       case 'Escape':
-        if (this._isOpen) { e.preventDefault(); this._close(); }
+        if (this._isOpen) { 
+          e.preventDefault(); 
+          this._close(); 
+        }
         break;
     }
   }
 
   private _handleOutsideClick(e: Event): void {
-    if (this._isOpen && !this.contains(e.target as Node)) this._close();
+    if (this._isOpen && !this.contains(e.target as Node)) {
+      this._close();
+    }
   }
 
-  protected _toggle(): void { this._isOpen ? this._close() : this._open(); }
+  protected _toggle(): void { 
+    this._isOpen ? this._close() : this._open(); 
+  }
 
   protected _open(): void {
     this._isOpen = true;
@@ -116,9 +179,11 @@ export class UiSelect extends ShadowComponent {
     this._updateHighlight();
   }
   protected _close(): void {
-    this._isOpen = false; this._highlightedIndex = -1;
+    this._isOpen = false; 
+    this._highlightedIndex = -1;
     const trigger = this.shadowQuerySelector('.ui-select__trigger') as HTMLElement;
-    trigger?.setAttribute('aria-expanded', 'false'); trigger?.focus();
+    trigger?.setAttribute('aria-expanded', 'false'); 
+    trigger?.focus();
     (this.shadowQuerySelector('.ui-select__dropdown') as HTMLElement).style.display = 'none';
   }
 
@@ -127,7 +192,8 @@ export class UiSelect extends ShadowComponent {
     if (!enabled.length) return;
     let current = enabled.indexOf(this._highlightedIndex);
     current = (current + direction + enabled.length) % enabled.length;
-    this._highlightedIndex = enabled[current]; this._updateHighlight();
+    this._highlightedIndex = enabled[current]; 
+    this._updateHighlight();
   }
   protected _updateHighlight(): void {
     this.shadowRoot?.querySelectorAll('.ui-select__option').forEach((opt, idx) => {
@@ -137,12 +203,16 @@ export class UiSelect extends ShadowComponent {
 
   protected _select(value: string): void {
     this.value = value; 
-    if (this._shouldCloseOnSelection()) this._close();
+    if (this._shouldCloseOnSelection()) {
+      this._close();
+    }
     this.dispatchEvent(new CustomEvent('change', { detail: { value: this.value }, bubbles: true }));
   }
   protected _selectByIndex(index: number): void {
     const option = this._options[index];
-    if (option && !option.disabled) this._select(option.value);
+    if (option && !option.disabled) {
+      this._select(option.value);
+    }
   }
 
   protected _isOptionSelected(optionValue: string): boolean {
@@ -153,7 +223,9 @@ export class UiSelect extends ShadowComponent {
     return true;
   }
 
-  protected getStyles(): string { return selectCss; }
+  protected getStyles(): string { 
+    return selectCss; 
+  }
 }
 
 customElements.define("ui-select", UiSelect);
