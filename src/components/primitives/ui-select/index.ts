@@ -1,2 +1,2 @@
-export { UiSelect } from './ui-select.js';
-export type { UiSelectOption, UiSelectEventDetail } from './ui-select.js';
+export { UiSelect } from "./ui-select.js";
+export type { UiSelectOption } from "./ui-select.js";

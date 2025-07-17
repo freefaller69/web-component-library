@@ -27,6 +27,9 @@ dist-ssr
 *storybook.log
 storybook-static
 
+# Runtime process files
+*.pid
+
 # Coverage
 coverage
 

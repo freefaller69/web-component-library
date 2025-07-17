@@ -1,0 +1,28 @@
+/* Additional styles for multi-select */
+.ui-multi-select .ui-select__display {
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Visual indicator for multi-select */
+.ui-multi-select .ui-select__arrow::after {
+  content: ' (multi)';
+  font-size: 0.75em;
+  opacity: 0.6;
+  margin-left: 0.25rem;
+}
+
+/* Better spacing for multiple selections */
+.ui-multi-select .ui-select__option--selected {
+  position: relative;
+}
+
+.ui-multi-select .ui-select__option--selected::after {
+  content: '✓';
+  position: absolute;
+  right: 8px;
+  color: white;
+  font-weight: bold;
+}

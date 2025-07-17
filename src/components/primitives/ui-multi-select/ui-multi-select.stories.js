@@ -1,15 +1,15 @@
-import './ui-select.js';
+import './ui-multi-select.js';
 
 export default {
-  title: 'Primitives/ui-select',
-  component: 'ui-select',
+  title: 'Primitives/ui-multi-select',
+  component: 'ui-multi-select',
   parameters: {
     layout: 'centered',
   },
 };
 
 const Template = (args) => {
-  const select = document.createElement('ui-select');
+  const select = document.createElement('ui-multi-select');
   
   Object.keys(args).forEach(key => {
     if (key === 'options') {
@@ -24,24 +24,25 @@ const Template = (args) => {
 
 export const Default = Template.bind({});
 Default.args = {
-  placeholder: 'Select an option',
+  placeholder: 'Select languages',
   options: [
     { value: 'js', label: 'JavaScript' },
     { value: 'ts', label: 'TypeScript' },
     { value: 'py', label: 'Python' },
     { value: 'rs', label: 'Rust' },
+    { value: 'go', label: 'Go' },
   ],
 };
 
-export const WithValue = Template.bind({});
-WithValue.args = {
+export const WithSelections = Template.bind({});
+WithSelections.args = {
   ...Default.args,
-  value: 'ts',
+  value: 'js,ts',
 };
 
 export const Disabled = Template.bind({});
 Disabled.args = {
   ...Default.args,
   disabled: true,
+  value: 'js,py',
 };
-
