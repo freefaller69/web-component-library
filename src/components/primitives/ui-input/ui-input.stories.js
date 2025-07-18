@@ -27,7 +27,7 @@ export default {
   argTypes: {
     type: {
       control: 'select',
-      options: ['text', 'password', 'email', 'number', 'tel', 'url', 'search'],
+      options: ['text', 'password'],
       description: 'Input type',
       table: {
         type: { summary: 'string' },
@@ -110,34 +110,6 @@ export default {
         type: { summary: 'string' }
       }
     },
-    pattern: {
-      control: 'text',
-      description: 'Validation pattern (regex)',
-      table: {
-        type: { summary: 'string' }
-      }
-    },
-    min: {
-      control: 'text',
-      description: 'Minimum value (for number/date types)',
-      table: {
-        type: { summary: 'string' }
-      }
-    },
-    max: {
-      control: 'text',
-      description: 'Maximum value (for number/date types)',
-      table: {
-        type: { summary: 'string' }
-      }
-    },
-    step: {
-      control: 'text',
-      description: 'Step value (for number type)',
-      table: {
-        type: { summary: 'string' }
-      }
-    },
     autocomplete: {
       control: 'text',
       description: 'Autocomplete attribute',
@@ -178,38 +150,6 @@ Password.args = {
   placeholder: 'Enter password'
 };
 
-export const Email = Template.bind({});
-Email.args = {
-  type: 'email',
-  placeholder: 'Enter email address'
-};
-
-export const Number = Template.bind({});
-Number.args = {
-  type: 'number',
-  placeholder: 'Enter number',
-  min: '0',
-  max: '100',
-  step: '1'
-};
-
-export const Search = Template.bind({});
-Search.args = {
-  type: 'search',
-  placeholder: 'Search...'
-};
-
-export const Tel = Template.bind({});
-Tel.args = {
-  type: 'tel',
-  placeholder: 'Enter phone number'
-};
-
-export const URL = Template.bind({});
-URL.args = {
-  type: 'url',
-  placeholder: 'Enter URL'
-};
 
 export const Small = Template.bind({});
 Small.args = {
@@ -261,11 +201,6 @@ WithValue.args = {
   placeholder: 'Enter text'
 };
 
-export const WithPattern = Template.bind({});
-WithPattern.args = {
-  pattern: '[0-9]{3}-[0-9]{3}-[0-9]{4}',
-  placeholder: '123-456-7890'
-};
 
 // Showcase stories
 export const AllTypes = () => {
@@ -274,12 +209,7 @@ export const AllTypes = () => {
   
   const types = [
     { type: 'text', placeholder: 'Text input' },
-    { type: 'password', placeholder: 'Password input' },
-    { type: 'email', placeholder: 'Email input' },
-    { type: 'number', placeholder: 'Number input' },
-    { type: 'search', placeholder: 'Search input' },
-    { type: 'tel', placeholder: 'Phone input' },
-    { type: 'url', placeholder: 'URL input' }
+    { type: 'password', placeholder: 'Password input' }
   ];
   
   types.forEach(({ type, placeholder }) => {
@@ -409,87 +339,95 @@ export const FormIntegration = () => {
   title.textContent = 'User Registration';
   title.style.cssText = 'margin: 0 0 1rem 0;';
   
-  // Name field
-  const nameWrapper = document.createElement('div');
-  nameWrapper.style.cssText = 'display: flex; flex-direction: column; gap: 0.25rem;';
+  // Username field
+  const usernameWrapper = document.createElement('div');
+  usernameWrapper.style.cssText = 'display: flex; flex-direction: column; gap: 0.25rem;';
   
-  const nameLabel = document.createElement('label');
-  nameLabel.textContent = 'Full Name *';
-  nameLabel.style.cssText = 'font-size: 0.875rem; font-weight: 500; color: #374151;';
+  const usernameLabel = document.createElement('label');
+  usernameLabel.textContent = 'Username *';
+  usernameLabel.style.cssText = 'font-size: 0.875rem; font-weight: 500; color: #374151;';
   
-  const nameInput = document.createElement('ui-input');
-  nameInput.setAttribute('name', 'name');
-  nameInput.setAttribute('required', '');
-  nameInput.setAttribute('placeholder', 'Enter your full name');
-  nameInput.setAttribute('aria-describedby', 'name-help');
+  const usernameInput = document.createElement('ui-input');
+  usernameInput.setAttribute('type', 'text');
+  usernameInput.setAttribute('name', 'username');
+  usernameInput.setAttribute('required', '');
+  usernameInput.setAttribute('placeholder', 'Enter your username');
+  usernameInput.setAttribute('autocomplete', 'username');
+  usernameInput.setAttribute('aria-describedby', 'username-help');
   
-  const nameHelp = document.createElement('div');
-  nameHelp.id = 'name-help';
-  nameHelp.textContent = 'Enter your first and last name';
-  nameHelp.style.cssText = 'font-size: 0.75rem; color: #6b7280;';
+  const usernameHelp = document.createElement('div');
+  usernameHelp.id = 'username-help';
+  usernameHelp.textContent = 'Username must be at least 3 characters long';
+  usernameHelp.style.cssText = 'font-size: 0.75rem; color: #6b7280;';
   
-  nameWrapper.appendChild(nameLabel);
-  nameWrapper.appendChild(nameInput);
-  nameWrapper.appendChild(nameHelp);
+  usernameWrapper.appendChild(usernameLabel);
+  usernameWrapper.appendChild(usernameInput);
+  usernameWrapper.appendChild(usernameHelp);
   
-  // Email field
-  const emailWrapper = document.createElement('div');
-  emailWrapper.style.cssText = 'display: flex; flex-direction: column; gap: 0.25rem;';
+  // Password field
+  const passwordWrapper = document.createElement('div');
+  passwordWrapper.style.cssText = 'display: flex; flex-direction: column; gap: 0.25rem;';
   
-  const emailLabel = document.createElement('label');
-  emailLabel.textContent = 'Email Address *';
-  emailLabel.style.cssText = 'font-size: 0.875rem; font-weight: 500; color: #374151;';
+  const passwordLabel = document.createElement('label');
+  passwordLabel.textContent = 'Password *';
+  passwordLabel.style.cssText = 'font-size: 0.875rem; font-weight: 500; color: #374151;';
   
-  const emailInput = document.createElement('ui-input');
-  emailInput.setAttribute('type', 'email');
-  emailInput.setAttribute('name', 'email');
-  emailInput.setAttribute('required', '');
-  emailInput.setAttribute('placeholder', 'Enter your email address');
-  emailInput.setAttribute('autocomplete', 'email');
+  const passwordInput = document.createElement('ui-input');
+  passwordInput.setAttribute('type', 'password');
+  passwordInput.setAttribute('name', 'password');
+  passwordInput.setAttribute('required', '');
+  passwordInput.setAttribute('placeholder', 'Enter your password');
+  passwordInput.setAttribute('autocomplete', 'new-password');
+  passwordInput.setAttribute('aria-describedby', 'password-help');
   
-  emailWrapper.appendChild(emailLabel);
-  emailWrapper.appendChild(emailInput);
+  const passwordHelp = document.createElement('div');
+  passwordHelp.id = 'password-help';
+  passwordHelp.textContent = 'Password must be at least 8 characters long';
+  passwordHelp.style.cssText = 'font-size: 0.75rem; color: #6b7280;';
   
-  // Phone field
-  const phoneWrapper = document.createElement('div');
-  phoneWrapper.style.cssText = 'display: flex; flex-direction: column; gap: 0.25rem;';
+  passwordWrapper.appendChild(passwordLabel);
+  passwordWrapper.appendChild(passwordInput);
+  passwordWrapper.appendChild(passwordHelp);
   
-  const phoneLabel = document.createElement('label');
-  phoneLabel.textContent = 'Phone Number';
-  phoneLabel.style.cssText = 'font-size: 0.875rem; font-weight: 500; color: #374151;';
+  // Confirm Password field
+  const confirmWrapper = document.createElement('div');
+  confirmWrapper.style.cssText = 'display: flex; flex-direction: column; gap: 0.25rem;';
   
-  const phoneInput = document.createElement('ui-input');
-  phoneInput.setAttribute('type', 'tel');
-  phoneInput.setAttribute('name', 'phone');
-  phoneInput.setAttribute('placeholder', '(123) 456-7890');
-  phoneInput.setAttribute('pattern', '\\([0-9]{3}\\) [0-9]{3}-[0-9]{4}');
-  phoneInput.setAttribute('autocomplete', 'tel');
+  const confirmLabel = document.createElement('label');
+  confirmLabel.textContent = 'Confirm Password *';
+  confirmLabel.style.cssText = 'font-size: 0.875rem; font-weight: 500; color: #374151;';
   
-  phoneWrapper.appendChild(phoneLabel);
-  phoneWrapper.appendChild(phoneInput);
+  const confirmInput = document.createElement('ui-input');
+  confirmInput.setAttribute('type', 'password');
+  confirmInput.setAttribute('name', 'confirmPassword');
+  confirmInput.setAttribute('required', '');
+  confirmInput.setAttribute('placeholder', 'Confirm your password');
+  confirmInput.setAttribute('autocomplete', 'new-password');
   
-  // Age field
-  const ageWrapper = document.createElement('div');
-  ageWrapper.style.cssText = 'display: flex; flex-direction: column; gap: 0.25rem;';
+  confirmWrapper.appendChild(confirmLabel);
+  confirmWrapper.appendChild(confirmInput);
   
-  const ageLabel = document.createElement('label');
-  ageLabel.textContent = 'Age';
-  ageLabel.style.cssText = 'font-size: 0.875rem; font-weight: 500; color: #374151;';
+  // Display Name field (optional)
+  const displayWrapper = document.createElement('div');
+  displayWrapper.style.cssText = 'display: flex; flex-direction: column; gap: 0.25rem;';
   
-  const ageInput = document.createElement('ui-input');
-  ageInput.setAttribute('type', 'number');
-  ageInput.setAttribute('name', 'age');
-  ageInput.setAttribute('min', '18');
-  ageInput.setAttribute('max', '120');
-  ageInput.setAttribute('placeholder', '25');
+  const displayLabel = document.createElement('label');
+  displayLabel.textContent = 'Display Name';
+  displayLabel.style.cssText = 'font-size: 0.875rem; font-weight: 500; color: #374151;';
   
-  ageWrapper.appendChild(ageLabel);
-  ageWrapper.appendChild(ageInput);
+  const displayInput = document.createElement('ui-input');
+  displayInput.setAttribute('type', 'text');
+  displayInput.setAttribute('name', 'displayName');
+  displayInput.setAttribute('placeholder', 'How should we display your name?');
+  displayInput.setAttribute('autocomplete', 'name');
+  
+  displayWrapper.appendChild(displayLabel);
+  displayWrapper.appendChild(displayInput);
   
   // Submit button
   const submitButton = document.createElement('button');
   submitButton.type = 'submit';
-  submitButton.textContent = 'Register';
+  submitButton.textContent = 'Create Account';
   submitButton.style.cssText = 'padding: 0.75rem 1.5rem; background: #2563eb; color: white; border: none; border-radius: 0.375rem; font-weight: 500; cursor: pointer;';
   
   // Form validation
@@ -500,48 +438,46 @@ export const FormIntegration = () => {
     const data = Object.fromEntries(formData);
     
     // Reset validation states
-    [nameInput, emailInput, phoneInput, ageInput].forEach(input => {
+    [usernameInput, passwordInput, confirmInput].forEach(input => {
       input.removeAttribute('invalid');
     });
     
     let isValid = true;
     
-    // Validate name
-    if (!data.name || data.name.trim().length < 2) {
-      nameInput.setAttribute('invalid', '');
+    // Validate username
+    if (!data.username || data.username.trim().length < 3) {
+      usernameInput.setAttribute('invalid', '');
       isValid = false;
     }
     
-    // Validate email
-    if (!data.email || !data.email.includes('@')) {
-      emailInput.setAttribute('invalid', '');
+    // Validate password
+    if (!data.password || data.password.length < 8) {
+      passwordInput.setAttribute('invalid', '');
       isValid = false;
     }
     
-    // Validate phone (if provided)
-    if (data.phone && !data.phone.match(/\\([0-9]{3}\\) [0-9]{3}-[0-9]{4}/)) {
-      phoneInput.setAttribute('invalid', '');
-      isValid = false;
-    }
-    
-    // Validate age (if provided)
-    if (data.age && (data.age < 18 || data.age > 120)) {
-      ageInput.setAttribute('invalid', '');
+    // Validate password confirmation
+    if (!data.confirmPassword || data.password !== data.confirmPassword) {
+      confirmInput.setAttribute('invalid', '');
       isValid = false;
     }
     
     if (isValid) {
-      alert('Registration successful!\\n\\n' + JSON.stringify(data, null, 2));
+      alert('Account created successfully!\\n\\n' + JSON.stringify({
+        username: data.username,
+        displayName: data.displayName || data.username,
+        password: '***hidden***'
+      }, null, 2));
     } else {
       alert('Please fix the validation errors and try again.');
     }
   });
   
   form.appendChild(title);
-  form.appendChild(nameWrapper);
-  form.appendChild(emailWrapper);
-  form.appendChild(phoneWrapper);
-  form.appendChild(ageWrapper);
+  form.appendChild(usernameWrapper);
+  form.appendChild(passwordWrapper);
+  form.appendChild(confirmWrapper);
+  form.appendChild(displayWrapper);
   form.appendChild(submitButton);
   
   container.appendChild(form);
@@ -618,7 +554,7 @@ export const AccessibilityTest = () => {
   errorLabel.style.cssText = 'font-weight: 500;';
   
   const errorInput = document.createElement('ui-input');
-  errorInput.setAttribute('type', 'email');
+  errorInput.setAttribute('type', 'text');
   errorInput.setAttribute('value', 'invalid-email');
   errorInput.setAttribute('invalid', '');
   errorInput.setAttribute('aria-describedby', 'email-error');
