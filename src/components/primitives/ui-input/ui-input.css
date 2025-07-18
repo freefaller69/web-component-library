@@ -92,26 +92,6 @@
   color: var(--ui-input-placeholder-color-disabled, #d1d5db);
 }
 
-/* Number input specific styles */
-.ui-input[type="number"] {
-  -moz-appearance: textfield;
-}
-
-.ui-input[type="number"]::-webkit-outer-spin-button,
-.ui-input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Search input specific styles */
-.ui-input[type="search"] {
-  -webkit-appearance: none;
-}
-
-.ui-input[type="search"]::-webkit-search-cancel-button,
-.ui-input[type="search"]::-webkit-search-decoration {
-  -webkit-appearance: none;
-}
 
 /* Password input specific styles */
 .ui-input[type="password"] {
