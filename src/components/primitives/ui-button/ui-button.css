@@ -1,37 +1,21 @@
-/* ui-button component styles */
-
 :host {
   display: inline-block;
-  
-  /* CSS Custom Properties for theming */
   --ui-button-color-primary: #007bff;
-  --ui-button-color-primary-hover: #0056b3;
   --ui-button-color-secondary: #6c757d;
-  --ui-button-color-secondary-hover: #545b62;
-  --ui-button-color-background: #ffffff;
-  --ui-button-color-text: var(--color-text, #212529);
   --ui-button-color-disabled: #6c757d;
-  --ui-button-color-disabled-text: #ffffff;
-  
   --ui-button-border-radius: 0.375rem;
-  --ui-button-font-weight: 500;
   --ui-button-transition: all 0.2s ease-in-out;
 }
 
-/* Base button styles */
 .ui-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  
   font-family: inherit;
-  font-weight: var(--ui-button-font-weight);
+  font-weight: 500;
   line-height: 1.5;
-  text-decoration: none;
-  text-align: center;
   user-select: none;
-  
   border: 1px solid transparent;
   border-radius: var(--ui-button-border-radius);
   cursor: pointer;
@@ -51,32 +35,21 @@
 .ui-button:disabled {
   cursor: not-allowed;
   background-color: var(--ui-button-color-disabled) !important;
-  color: var(--ui-button-color-disabled-text) !important;
+  color: white !important;
   border-color: var(--ui-button-color-disabled) !important;
   opacity: 0.6;
 }
 
-/* Variant styles using data attributes */
 .ui-button[data-variant="primary"] {
   background-color: var(--ui-button-color-primary);
-  color: var(--ui-button-color-background);
+  color: white;
   border-color: var(--ui-button-color-primary);
-}
-
-.ui-button[data-variant="primary"]:hover:not(:disabled) {
-  background-color: var(--ui-button-color-primary-hover);
-  border-color: var(--ui-button-color-primary-hover);
 }
 
 .ui-button[data-variant="secondary"] {
   background-color: var(--ui-button-color-secondary);
-  color: var(--ui-button-color-background);
+  color: white;
   border-color: var(--ui-button-color-secondary);
-}
-
-.ui-button[data-variant="secondary"]:hover:not(:disabled) {
-  background-color: var(--ui-button-color-secondary-hover);
-  border-color: var(--ui-button-color-secondary-hover);
 }
 
 .ui-button[data-variant="ghost"] {
@@ -85,9 +58,14 @@
   border-color: var(--ui-button-color-primary);
 }
 
+.ui-button:hover:not(:disabled) {
+  filter: brightness(0.9);
+}
+
 .ui-button[data-variant="ghost"]:hover:not(:disabled) {
   background-color: var(--ui-button-color-primary);
-  color: var(--ui-button-color-background);
+  color: white;
+  filter: none;
 }
 
 /* Size styles using data attributes */
@@ -109,7 +87,6 @@
   min-height: 3rem;
 }
 
-/* Loading spinner */
 .ui-button__spinner {
   width: 1em;
   height: 1em;
@@ -117,32 +94,18 @@
   border-top: 2px solid currentColor;
   border-radius: 50%;
   animation: ui-button-spin 1s linear infinite;
-  flex-shrink: 0;
 }
 
 @keyframes ui-button-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  to { transform: rotate(360deg); }
 }
 
-/* Accessibility and motion preferences */
 @media (prefers-reduced-motion: reduce) {
-  .ui-button {
-    transition: none;
-  }
-  
-  .ui-button:active:not(:disabled) {
-    transform: none;
-  }
-  
-  .ui-button__spinner {
-    animation: none;
-  }
+  .ui-button { transition: none; }
+  .ui-button:active:not(:disabled) { transform: none; }
+  .ui-button__spinner { animation: none; }
 }
 
-/* High contrast mode */
 @media (prefers-contrast: high) {
-  .ui-button {
-    border-width: 2px;
-  }
+  .ui-button { border-width: 2px; }
 }
