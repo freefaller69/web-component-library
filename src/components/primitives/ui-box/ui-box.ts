@@ -26,14 +26,12 @@ export class UiBox extends ShadowComponent {
   private _clickable = false;
 
   constructor() {
-    super();
+    super({ mode: "open" }, false);
     this._handleClick = this._handleClick.bind(this);
     this._handleKeydown = this._handleKeydown.bind(this);
   }
 
-  get padding(): BoxSpacing | null {
-    return this._padding;
-  }
+  get padding(): BoxSpacing | null { return this._padding; }
   set padding(value: BoxSpacing | null) {
     this._padding = value;
     if (value) {
@@ -44,9 +42,7 @@ export class UiBox extends ShadowComponent {
     this.render();
   }
 
-  get radius(): BoxRadius | null {
-    return this._radius;
-  }
+  get radius(): BoxRadius | null { return this._radius; }
   set radius(value: BoxRadius | null) {
     this._radius = value;
     if (value) {
@@ -57,9 +53,7 @@ export class UiBox extends ShadowComponent {
     this.render();
   }
 
-  get shadow(): BoxShadow | null {
-    return this._shadow;
-  }
+  get shadow(): BoxShadow | null { return this._shadow; }
   set shadow(value: BoxShadow | null) {
     this._shadow = value;
     if (value) {
@@ -70,20 +64,14 @@ export class UiBox extends ShadowComponent {
     this.render();
   }
 
-  get clickable(): boolean {
-    return this._clickable;
-  }
+  get clickable(): boolean { return this._clickable; }
   set clickable(value: boolean) {
     this._clickable = Boolean(value);
     this.setAttributeSafe("clickable", this._clickable);
     this.render();
   }
 
-  protected onAttributeChange(
-    name: string,
-    _oldValue: string | null,
-    newValue: string | null
-  ): void {
+  protected onAttributeChange(name: string, _oldValue: string | null, newValue: string | null): void {
     switch (name) {
       case "padding":
         this._padding = newValue as BoxSpacing | null;
@@ -98,39 +86,23 @@ export class UiBox extends ShadowComponent {
         this._clickable = newValue !== null;
         break;
     }
+    this.render();
   }
 
   protected renderShadowContent(): void {
-    const div = document.createElement("div");
-    div.classList.add("ui-box");
-    
-    if (this._padding) {
-      div.setAttribute("data-padding", this._padding);
-    }
-    
-    if (this._radius) {
-      div.setAttribute("data-radius", this._radius);
-    }
-    
-    if (this._shadow) {
-      div.setAttribute("data-shadow", this._shadow);
-    }
-    
-    if (this._clickable) {
-      div.setAttribute("data-clickable", "true");
-      div.setAttribute("tabindex", "0");
-      div.setAttribute("role", "button");
-    }
-
-    const slot = document.createElement("slot");
-    div.appendChild(slot);
-
-    this.setContent(div.outerHTML);
+    this.setContent(this._getTemplate());
     this._setupEventListeners();
   }
 
-  protected getStyles(): string {
-    return boxCss;
+  private _getTemplate(): string {
+    const paddingAttr = this._padding ? ` data-padding="${this._padding}"` : "";
+    const radiusAttr = this._radius ? ` data-radius="${this._radius}"` : "";
+    const shadowAttr = this._shadow ? ` data-shadow="${this._shadow}"` : "";
+    const clickableAttrs = this._clickable ? ' data-clickable="true" tabindex="0" role="button"' : "";
+    
+    return `<div class="ui-box"${paddingAttr}${radiusAttr}${shadowAttr}${clickableAttrs}>
+      <slot></slot>
+    </div>`;
   }
 
   private _setupEventListeners(): void {
@@ -145,12 +117,9 @@ export class UiBox extends ShadowComponent {
 
   private _handleClick(event: Event): void {
     if (!this._clickable) return;
-
     this.dispatchEvent(
       new CustomEvent("ui-box-click", {
-        detail: {
-          originalEvent: event,
-        },
+        detail: { originalEvent: event },
         bubbles: true,
         cancelable: true,
       })
@@ -176,6 +145,11 @@ export class UiBox extends ShadowComponent {
       this._handleClick(new Event("click"));
     }
   }
+
+  protected getStyles(): string {
+    return boxCss;
+  }
+
 }
 
 customElements.define("ui-box", UiBox);

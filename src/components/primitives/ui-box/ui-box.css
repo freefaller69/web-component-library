@@ -1,49 +1,31 @@
-/* ui-box component styles */
-
 :host {
   display: contents;
-  
-  /* CSS Custom Properties for theming */
-  --ui-box-color-shadow: hsl(0, 0%, 0%);
   --ui-box-color-focus: hsl(217, 91%, 60%);
   --ui-box-transition: all 0.2s ease-in-out;
 }
 
-/* Base box styles */
 .ui-box {
   box-sizing: border-box;
   transition: var(--ui-box-transition);
 }
 
-/* Padding using data attributes */
 .ui-box[data-padding="xs"] { padding: 0.25rem; }
 .ui-box[data-padding="sm"] { padding: 0.5rem; }
 .ui-box[data-padding="md"] { padding: 1rem; }
 .ui-box[data-padding="lg"] { padding: 1.5rem; }
 .ui-box[data-padding="xl"] { padding: 2rem; }
 
-/* Border radius using data attributes */
 .ui-box[data-radius="sm"] { border-radius: 0.125rem; }
 .ui-box[data-radius="md"] { border-radius: 0.375rem; }
 .ui-box[data-radius="lg"] { border-radius: 0.5rem; }
 .ui-box[data-radius="xl"] { border-radius: 0.75rem; }
 .ui-box[data-radius="full"] { border-radius: 9999px; }
 
-/* Shadow using data attributes */
-.ui-box[data-shadow="sm"] { 
-  box-shadow: 0 1px 2px 0 hsla(0, 0%, 0%, 0.05); 
-}
-.ui-box[data-shadow="md"] { 
-  box-shadow: 0 4px 6px -1px hsla(0, 0%, 0%, 0.1), 0 2px 4px -1px hsla(0, 0%, 0%, 0.06); 
-}
-.ui-box[data-shadow="lg"] { 
-  box-shadow: 0 10px 15px -3px hsla(0, 0%, 0%, 0.1), 0 4px 6px -2px hsla(0, 0%, 0%, 0.05); 
-}
-.ui-box[data-shadow="xl"] { 
-  box-shadow: 0 20px 25px -5px hsla(0, 0%, 0%, 0.1), 0 10px 10px -5px hsla(0, 0%, 0%, 0.04); 
-}
+.ui-box[data-shadow="sm"] { box-shadow: 0 1px 2px 0 hsla(0, 0%, 0%, 0.05); }
+.ui-box[data-shadow="md"] { box-shadow: 0 4px 6px -1px hsla(0, 0%, 0%, 0.1), 0 2px 4px -1px hsla(0, 0%, 0%, 0.06); }
+.ui-box[data-shadow="lg"] { box-shadow: 0 10px 15px -3px hsla(0, 0%, 0%, 0.1), 0 4px 6px -2px hsla(0, 0%, 0%, 0.05); }
+.ui-box[data-shadow="xl"] { box-shadow: 0 20px 25px -5px hsla(0, 0%, 0%, 0.1), 0 10px 10px -5px hsla(0, 0%, 0%, 0.04); }
 
-/* Clickable styles */
 .ui-box[data-clickable="true"] {
   cursor: pointer;
   outline: none;
@@ -62,7 +44,6 @@
   transform: translateY(0);
 }
 
-/* Accessibility and motion preferences */
 @media (prefers-reduced-motion: reduce) {
   .ui-box {
     transition: none;
@@ -74,7 +55,6 @@
   }
 }
 
-/* High contrast mode */
 @media (prefers-contrast: high) {
   .ui-box[data-clickable="true"] {
     border: 2px solid currentColor;
