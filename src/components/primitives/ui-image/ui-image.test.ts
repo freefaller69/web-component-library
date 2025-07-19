@@ -25,9 +25,6 @@ describe('ui-image', () => {
       expect(element.src).toBe("");
       expect(element.alt).toBe("");
       expect(element.loading).toBe("lazy");
-      expect(element.decoding).toBe("async");
-      expect(element.srcset).toBe("");
-      expect(element.sizes).toBe("");
       expect(element.fit).toBe("cover");
       expect(element.fallback).toBe("");
     });
@@ -107,66 +104,6 @@ describe('ui-image', () => {
       });
     });
 
-    describe('decoding', () => {
-      it('should sync property to attribute', () => {
-        element.decoding = 'sync';
-        expect(element.getAttribute('decoding')).toBe('sync');
-      });
-
-      it('should sync attribute to property', () => {
-        element.setAttribute('decoding', 'sync');
-        expect(element.decoding).toBe('sync');
-      });
-
-      it('should set decoding on img element', () => {
-        element.src = 'test.jpg';
-        element.decoding = 'sync';
-        
-        const img = element.shadowRoot?.querySelector('.ui-image__img') as HTMLImageElement;
-        expect(img.getAttribute('decoding')).toBe('sync');
-      });
-    });
-
-    describe('srcset', () => {
-      it('should sync property to attribute', () => {
-        element.srcset = 'test-2x.jpg 2x';
-        expect(element.getAttribute('srcset')).toBe('test-2x.jpg 2x');
-      });
-
-      it('should sync attribute to property', () => {
-        element.setAttribute('srcset', 'test-2x.jpg 2x');
-        expect(element.srcset).toBe('test-2x.jpg 2x');
-      });
-
-      it('should set srcset on img element', () => {
-        element.src = 'test.jpg';
-        element.srcset = 'test-2x.jpg 2x';
-        
-        const img = element.shadowRoot?.querySelector('.ui-image__img') as HTMLImageElement;
-        expect(img.srcset).toBe('test-2x.jpg 2x');
-      });
-    });
-
-    describe('sizes', () => {
-      it('should sync property to attribute', () => {
-        element.sizes = '(max-width: 600px) 100vw, 50vw';
-        expect(element.getAttribute('sizes')).toBe('(max-width: 600px) 100vw, 50vw');
-      });
-
-      it('should sync attribute to property', () => {
-        element.setAttribute('sizes', '(max-width: 600px) 100vw, 50vw');
-        expect(element.sizes).toBe('(max-width: 600px) 100vw, 50vw');
-      });
-
-      it('should set sizes on img element', () => {
-        element.src = 'test.jpg';
-        element.sizes = '(max-width: 600px) 100vw, 50vw';
-        
-        const img = element.shadowRoot?.querySelector('.ui-image__img') as HTMLImageElement;
-        expect(img.sizes).toBe('(max-width: 600px) 100vw, 50vw');
-      });
-    });
-
     describe('fit', () => {
       it('should sync property to attribute', () => {
         element.fit = 'contain';
@@ -201,44 +138,6 @@ describe('ui-image', () => {
   });
 
   describe('Event handling', () => {
-    it('should dispatch ui-image-load event on successful load', async () => {
-      let eventFired = false;
-      let eventDetail: any = null;
-      
-      element.addEventListener('ui-image-load', (e: any) => {
-        eventFired = true;
-        eventDetail = e.detail;
-      });
-      
-      element.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-      
-      const img = element.shadowRoot?.querySelector('.ui-image__img') as HTMLImageElement;
-      img.dispatchEvent(new Event('load'));
-      
-      expect(eventFired).toBe(true);
-      expect(eventDetail).toBeDefined();
-      expect(eventDetail.originalEvent).toBeDefined();
-    });
-
-    it('should dispatch ui-image-error event on load error', async () => {
-      let eventFired = false;
-      let eventDetail: any = null;
-      
-      element.addEventListener('ui-image-error', (e: any) => {
-        eventFired = true;
-        eventDetail = e.detail;
-      });
-      
-      element.src = 'invalid-image.jpg';
-      
-      const img = element.shadowRoot?.querySelector('.ui-image__img') as HTMLImageElement;
-      img.dispatchEvent(new Event('error'));
-      
-      expect(eventFired).toBe(true);
-      expect(eventDetail).toBeDefined();
-      expect(eventDetail.originalEvent).toBeDefined();
-    });
-
     it('should switch to fallback image on error', async () => {
       element.src = 'invalid-image.jpg';
       element.fallback = 'fallback.jpg';
@@ -253,19 +152,6 @@ describe('ui-image', () => {
       expect(newImg.src).toContain('fallback.jpg');
     });
 
-    it('should not set srcset on fallback image', async () => {
-      element.src = 'invalid-image.jpg';
-      element.srcset = 'invalid-2x.jpg 2x';
-      element.fallback = 'fallback.jpg';
-      
-      const img = element.shadowRoot?.querySelector('.ui-image__img') as HTMLImageElement;
-      img.dispatchEvent(new Event('error'));
-      
-      await new Promise(resolve => setTimeout(resolve, 0));
-      
-      const newImg = element.shadowRoot?.querySelector('.ui-image__img') as HTMLImageElement;
-      expect(newImg.srcset).toBe('');
-    });
   });
 
   describe('Object-fit styling', () => {

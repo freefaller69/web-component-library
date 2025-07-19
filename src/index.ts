@@ -15,4 +15,3 @@ export { UiText } from './components/primitives/ui-text/index.js';
 // Export types if needed
 export type { ButtonProps } from './components/Button/Button';
 export type { HeaderProps } from './components/Header/Header';
-export type { UiImageEventDetail } from './components/primitives/ui-image/index.js';
