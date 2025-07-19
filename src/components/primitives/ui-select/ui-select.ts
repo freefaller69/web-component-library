@@ -24,40 +24,28 @@ export class UiSelect extends ShadowComponent {
     this._handleOutsideClick = this._handleOutsideClick.bind(this);
   }
 
-  get value(): string { 
-    return this._value; 
-  }
-  
+  get value(): string { return this._value; }
   set value(val: string) { 
     this._value = val; 
     this.setAttributeSafe("value", val); 
     this._updateDisplay(); 
   }
   
-  get placeholder(): string { 
-    return this._placeholder; 
-  }
-  
+  get placeholder(): string { return this._placeholder; }
   set placeholder(val: string) { 
     this._placeholder = val; 
     this.setAttributeSafe("placeholder", val); 
     this._updateDisplay(); 
   }
   
-  get disabled(): boolean { 
-    return this._disabled; 
-  }
-  
+  get disabled(): boolean { return this._disabled; }
   set disabled(val: boolean) { 
     this._disabled = val; 
     this.setAttributeSafe("disabled", val ? "" : null); 
     this.render(); 
   }
   
-  get options(): UiSelectOption[] { 
-    return this._options; 
-  }
-  
+  get options(): UiSelectOption[] { return this._options; }
   set options(opts: UiSelectOption[]) { 
     this._options = Array.isArray(opts) ? opts : []; 
     this._renderOptions(); 
@@ -90,7 +78,7 @@ export class UiSelect extends ShadowComponent {
   }
 
   protected renderShadowContent(): void {
-    this.setContent(`<div class="ui-select ${this._disabled ? 'ui-select--disabled' : ''}"><button class="ui-select__trigger" type="button" ${this._disabled ? 'disabled' : ''} aria-haspopup="listbox" aria-expanded="false"><span class="ui-select__display"></span><span class="ui-select__arrow">▼</span></button><div class="ui-select__dropdown" role="listbox" style="display: none;"></div></div>`);
+    this.setContent(this._getTemplate());
     const trigger = this.shadowQuerySelector('.ui-select__trigger') as HTMLElement;
     if (trigger) {
       this.addManagedEventListener(trigger, 'click', () => this._toggle());
@@ -98,6 +86,18 @@ export class UiSelect extends ShadowComponent {
     }
     this._updateDisplay(); 
     this._renderOptions();
+  }
+  
+  private _getTemplate(): string {
+    const disabledClass = this._disabled ? 'ui-select--disabled' : '';
+    const disabledAttr = this._disabled ? 'disabled' : '';
+    return `<div class="ui-select ${disabledClass}">
+      <button class="ui-select__trigger" type="button" ${disabledAttr} aria-haspopup="listbox" aria-expanded="false">
+        <span class="ui-select__display"></span>
+        <span class="ui-select__arrow">▼</span>
+      </button>
+      <div class="ui-select__dropdown" role="listbox" style="display: none;"></div>
+    </div>`;
   }
 
   protected _updateDisplay(): void {
@@ -122,7 +122,7 @@ export class UiSelect extends ShadowComponent {
       } else {
         this.addManagedEventListener(el, 'click', () => this._select(option.value));
       }
-      if (this._isOptionSelected(option.value)) el.classList.add('ui-select__option--selected');
+      if (option.value === this._value) el.classList.add('ui-select__option--selected');
       dropdown.appendChild(el);
     });
   }
@@ -145,9 +145,7 @@ export class UiSelect extends ShadowComponent {
         e.preventDefault();
         if (this._isOpen && this._highlightedIndex >= 0) {
           this._selectByIndex(this._highlightedIndex);
-          if (this._shouldCloseOnSelection()) {
-            this._close();
-          }
+          this._close();
         } else {
           this._toggle();
         }
@@ -182,9 +180,10 @@ export class UiSelect extends ShadowComponent {
     this._isOpen = false; 
     this._highlightedIndex = -1;
     const trigger = this.shadowQuerySelector('.ui-select__trigger') as HTMLElement;
+    const dropdown = this.shadowQuerySelector('.ui-select__dropdown') as HTMLElement;
     trigger?.setAttribute('aria-expanded', 'false'); 
     trigger?.focus();
-    (this.shadowQuerySelector('.ui-select__dropdown') as HTMLElement).style.display = 'none';
+    dropdown.style.display = 'none';
   }
 
   protected _navigate(direction: number): void {
@@ -203,9 +202,7 @@ export class UiSelect extends ShadowComponent {
 
   protected _select(value: string): void {
     this.value = value; 
-    if (this._shouldCloseOnSelection()) {
-      this._close();
-    }
+    this._close();
     this.dispatchEvent(new CustomEvent('change', { detail: { value: this.value }, bubbles: true }));
   }
   protected _selectByIndex(index: number): void {
@@ -213,14 +210,6 @@ export class UiSelect extends ShadowComponent {
     if (option && !option.disabled) {
       this._select(option.value);
     }
-  }
-
-  protected _isOptionSelected(optionValue: string): boolean {
-    return optionValue === this._value;
-  }
-
-  protected _shouldCloseOnSelection(): boolean {
-    return true;
   }
 
   protected getStyles(): string { 
