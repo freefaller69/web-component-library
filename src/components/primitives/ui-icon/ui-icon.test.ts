@@ -23,17 +23,16 @@ describe('ui-icon', () => {
 
   describe('Component initialization and defaults', () => {
     it('should create with default values', () => {
-      expect(element.name).toBe(null);
       expect(element.size).toBe('md');
-      expect(element.ariaLabel).toBe(null);
+      expect(element.label).toBe('');
     });
 
     it('should have proper shadow DOM structure', () => {
       const iconElement = element.shadowRoot?.querySelector('.ui-icon');
       expect(iconElement).toBeDefined();
       expect(iconElement?.classList.contains('ui-icon')).toBe(true);
-      expect(iconElement?.classList.contains('ui-icon--md')).toBe(true);
-      expect(iconElement?.tagName.toLowerCase()).toBe('span');
+      expect(iconElement?.getAttribute('data-size')).toBe('md');
+      expect(iconElement?.tagName.toLowerCase()).toBe('div');
     });
 
     it('should have slot for content', () => {
@@ -41,110 +40,69 @@ describe('ui-icon', () => {
       expect(slot).toBeDefined();
     });
 
-    it('should have aria-hidden by default when no aria-label', () => {
+    it('should have aria-hidden by default when no label', () => {
       const iconElement = element.shadowRoot?.querySelector('.ui-icon');
       expect(iconElement?.getAttribute('aria-hidden')).toBe('true');
     });
   });
 
   describe('Size property', () => {
-    it('should apply size class when size is set', () => {
+    it('should apply size attribute when size is set', () => {
       element.size = 'lg';
       const iconElement = element.shadowRoot?.querySelector('.ui-icon');
-      expect(iconElement?.classList.contains('ui-icon--lg')).toBe(true);
-      expect(iconElement?.classList.contains('ui-icon--md')).toBe(false);
+      expect(iconElement?.getAttribute('data-size')).toBe('lg');
     });
 
-    it('should update size class when size changes', () => {
+    it('should update size attribute when size changes', () => {
       element.size = 'sm';
       let iconElement = element.shadowRoot?.querySelector('.ui-icon');
-      expect(iconElement?.classList.contains('ui-icon--sm')).toBe(true);
+      expect(iconElement?.getAttribute('data-size')).toBe('sm');
 
-      element.size = 'xl';
+      element.size = 'lg';
       iconElement = element.shadowRoot?.querySelector('.ui-icon');
-      expect(iconElement?.classList.contains('ui-icon--xl')).toBe(true);
-      expect(iconElement?.classList.contains('ui-icon--sm')).toBe(false);
+      expect(iconElement?.getAttribute('data-size')).toBe('lg');
     });
 
     it('should handle all size variants', () => {
-      const sizes = ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl'] as const;
+      const sizes = ['sm', 'md', 'lg'] as const;
       
       for (const size of sizes) {
         element.size = size;
         const iconElement = element.shadowRoot?.querySelector('.ui-icon');
-        expect(iconElement?.classList.contains(`ui-icon--${size}`)).toBe(true);
+        expect(iconElement?.getAttribute('data-size')).toBe(size);
       }
     });
   });
 
-  describe('Name property and built-in icons', () => {
-    it('should render built-in icon when name is set', () => {
-      element.name = 'check';
-      const iconElement = element.shadowRoot?.querySelector('.ui-icon');
-      const svg = iconElement?.querySelector('svg');
-      expect(svg).toBeDefined();
-      expect(svg?.getAttribute('viewBox')).toBe('0 0 24 24');
-    });
-
-    it('should render different built-in icons', () => {
-      const iconNames = ['check', 'x', 'plus', 'minus', 'chevron-up', 'chevron-down', 'chevron-left', 'chevron-right', 'arrow-up', 'arrow-down', 'arrow-left', 'arrow-right', 'menu', 'mail', 'file'];
-      
-      for (const iconName of iconNames) {
-        element.name = iconName;
-        const iconElement = element.shadowRoot?.querySelector('.ui-icon');
-        const svg = iconElement?.querySelector('svg');
-        expect(svg).toBeDefined();
-      }
-    });
-
-    it('should clear icon when name is set to null', () => {
-      element.name = 'check';
-      let iconElement = element.shadowRoot?.querySelector('.ui-icon');
-      let svg = iconElement?.querySelector('svg');
-      expect(svg).toBeDefined();
-
-      element.name = null;
-      iconElement = element.shadowRoot?.querySelector('.ui-icon');
-      svg = iconElement?.querySelector('svg');
-      expect(svg).toBe(null);
-    });
-
-    it('should handle unknown icon names gracefully', () => {
-      element.name = 'unknown-icon';
-      const iconElement = element.shadowRoot?.querySelector('.ui-icon');
-      const svg = iconElement?.querySelector('svg');
-      expect(svg).toBe(null);
-    });
-  });
 
   describe('Accessibility properties', () => {
-    it('should set aria-label and role when ariaLabel is provided', () => {
-      element.ariaLabel = 'Success icon';
+    it('should set aria-label and role when label is provided', () => {
+      element.label = 'Success icon';
       const iconElement = element.shadowRoot?.querySelector('.ui-icon');
       expect(iconElement?.getAttribute('aria-label')).toBe('Success icon');
       expect(iconElement?.getAttribute('role')).toBe('img');
       expect(iconElement?.hasAttribute('aria-hidden')).toBe(false);
     });
 
-    it('should set aria-hidden when no ariaLabel is provided', () => {
-      element.ariaLabel = null;
+    it('should set aria-hidden when no label is provided', () => {
+      element.label = '';
       const iconElement = element.shadowRoot?.querySelector('.ui-icon');
       expect(iconElement?.getAttribute('aria-hidden')).toBe('true');
       expect(iconElement?.hasAttribute('aria-label')).toBe(false);
       expect(iconElement?.hasAttribute('role')).toBe(false);
     });
 
-    it('should update accessibility attributes when ariaLabel changes', () => {
-      element.ariaLabel = 'Initial label';
+    it('should update accessibility attributes when label changes', () => {
+      element.label = 'Initial label';
       let iconElement = element.shadowRoot?.querySelector('.ui-icon');
       expect(iconElement?.getAttribute('aria-label')).toBe('Initial label');
       expect(iconElement?.getAttribute('role')).toBe('img');
 
-      element.ariaLabel = 'Updated label';
+      element.label = 'Updated label';
       iconElement = element.shadowRoot?.querySelector('.ui-icon');
       expect(iconElement?.getAttribute('aria-label')).toBe('Updated label');
 
-      element.ariaLabel = null;
+      element.label = '';
       iconElement = element.shadowRoot?.querySelector('.ui-icon');
       expect(iconElement?.getAttribute('aria-hidden')).toBe('true');
       expect(iconElement?.hasAttribute('aria-label')).toBe(false);
@@ -152,46 +110,31 @@ describe('ui-icon', () => {
   });
 
   describe('Attribute synchronization', () => {
-    it('should sync name attribute', () => {
-      element.name = 'check';
-      expect(element.getAttribute('name')).toBe('check');
-      
-      element.name = null;
-      expect(element.hasAttribute('name')).toBe(false);
-    });
-
     it('should sync size attribute', () => {
       element.size = 'lg';
       expect(element.getAttribute('size')).toBe('lg');
     });
 
-    it('should sync aria-label attribute', () => {
-      element.ariaLabel = 'Test label';
-      expect(element.getAttribute('aria-label')).toBe('Test label');
+    it('should sync label attribute', () => {
+      element.label = 'Test label';
+      expect(element.getAttribute('label')).toBe('Test label');
       
-      element.ariaLabel = null;
-      expect(element.hasAttribute('aria-label')).toBe(false);
+      element.label = '';
+      expect(element.getAttribute('label')).toBe('');
     });
 
     it('should handle attribute changes', () => {
-      element.setAttribute('name', 'plus');
-      expect(element.name).toBe('plus');
+      element.setAttribute('size', 'lg');
+      expect(element.size).toBe('lg');
       
-      element.setAttribute('size', 'xl');
-      expect(element.size).toBe('xl');
-      
-      element.setAttribute('aria-label', 'Add item');
-      expect(element.ariaLabel).toBe('Add item');
+      element.setAttribute('label', 'Add item');
+      expect(element.label).toBe('Add item');
     });
 
     it('should handle attribute removal', () => {
-      element.setAttribute('name', 'check');
-      element.removeAttribute('name');
-      expect(element.name).toBe(null);
-      
-      element.setAttribute('aria-label', 'Test');
-      element.removeAttribute('aria-label');
-      expect(element.ariaLabel).toBe(null);
+      element.setAttribute('label', 'Test');
+      element.removeAttribute('label');
+      expect(element.label).toBe('');
     });
   });
 
@@ -217,37 +160,25 @@ describe('ui-icon', () => {
   });
 
   describe('Edge cases and error handling', () => {
-    it('should handle empty string name', () => {
-      element.name = '';
-      const iconElement = element.shadowRoot?.querySelector('.ui-icon');
-      const svg = iconElement?.querySelector('svg');
-      expect(svg).toBe(null);
-    });
-
     it('should handle default size fallback', () => {
       element.setAttribute('size', '');
       expect(element.size).toBe('md');
       
       const iconElement = element.shadowRoot?.querySelector('.ui-icon');
-      expect(iconElement?.classList.contains('ui-icon--md')).toBe(true);
+      expect(iconElement?.getAttribute('data-size')).toBe('md');
     });
 
     it('should maintain icon structure after multiple property changes', () => {
-      element.name = 'check';
       element.size = 'lg';
-      element.ariaLabel = 'Success';
+      element.label = 'Success';
       
-      element.name = 'x';
       element.size = 'sm';
-      element.ariaLabel = 'Error';
+      element.label = 'Error';
       
       const iconElement = element.shadowRoot?.querySelector('.ui-icon');
       expect(iconElement?.classList.contains('ui-icon')).toBe(true);
-      expect(iconElement?.classList.contains('ui-icon--sm')).toBe(true);
+      expect(iconElement?.getAttribute('data-size')).toBe('sm');
       expect(iconElement?.getAttribute('aria-label')).toBe('Error');
-      
-      const svg = iconElement?.querySelector('svg');
-      expect(svg).toBeDefined();
     });
   });
 });

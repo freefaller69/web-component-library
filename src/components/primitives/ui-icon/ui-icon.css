@@ -1,76 +1,38 @@
-/* ui-icon component styles */
-
 :host {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  
-  /* CSS Custom Properties for theming */
-  --ui-icon-color: var(--color-text, currentColor);
-  --ui-icon-size: 1rem;
+  display: inline-block;
+  --ui-icon-color: currentColor;
+  --ui-icon-size-sm: 1rem;
+  --ui-icon-size-md: 1.5rem;
+  --ui-icon-size-lg: 2rem;
 }
 
 .ui-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--ui-icon-size);
-  height: var(--ui-icon-size);
   color: var(--ui-icon-color);
-  line-height: 1;
-  flex-shrink: 0;
+  width: var(--ui-icon-size-md);
+  height: var(--ui-icon-size-md);
 }
 
-/* All SVG elements within the icon */
-.ui-icon svg {
+.ui-icon[data-size="sm"] {
+  width: var(--ui-icon-size-sm);
+  height: var(--ui-icon-size-sm);
+}
+
+.ui-icon[data-size="md"] {
+  width: var(--ui-icon-size-md);
+  height: var(--ui-icon-size-md);
+}
+
+.ui-icon[data-size="lg"] {
+  width: var(--ui-icon-size-lg);
+  height: var(--ui-icon-size-lg);
+}
+
+.ui-icon ::slotted(*) {
   width: 100%;
   height: 100%;
-  display: block;
   fill: currentColor;
-  stroke: currentColor;
-}
-
-/* Size variants */
-.ui-icon--xs {
-  --ui-icon-size: 0.75rem;
-}
-
-.ui-icon--sm {
-  --ui-icon-size: 0.875rem;
-}
-
-.ui-icon--md {
-  --ui-icon-size: 1rem;
-}
-
-.ui-icon--lg {
-  --ui-icon-size: 1.125rem;
-}
-
-.ui-icon--xl {
-  --ui-icon-size: 1.25rem;
-}
-
-.ui-icon--2xl {
-  --ui-icon-size: 1.5rem;
-}
-
-.ui-icon--3xl {
-  --ui-icon-size: 2rem;
-}
-
-/* Ensure slotted content follows size rules */
-::slotted(svg) {
-  width: var(--ui-icon-size) !important;
-  height: var(--ui-icon-size) !important;
-  display: block !important;
-  fill: currentColor !important;
-  stroke: currentColor !important;
-}
-
-/* Support for icon fonts if needed */
-::slotted(i) {
-  font-size: var(--ui-icon-size) !important;
-  line-height: 1 !important;
-  color: currentColor !important;
+  color: currentColor;
 }
