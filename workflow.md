@@ -46,6 +46,8 @@ git checkout -b [type]/[component-name]-[description]
 
 - Component works in Storybook
 - Accessibility tested (keyboard nav, screen reader)
+- All tests are passing
+- Review code quality for security, inefficiencies, opportunities, and best practices
 - Code follows KondoKode principles
 - Line counts documented
 - Self-grading report completed
